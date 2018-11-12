@@ -1,3 +1,5 @@
+![タイムライン](https://i.imgur.com/wd5v6Z6.png)
+
 # xivtlsheet
 ACTのlogからタイムラインを作成します
 
@@ -7,6 +9,7 @@ ACTのlogからタイムラインを作成します
 自分のGoogleアカウントのドライブにスプレットシートをコピー
 
 # 使い方
+![使い方](https://i.imgur.com/xRyYtho.gif)
 1. ここをクリックして自分のGoogleドライブにブックをコピーする
 1. 某ツールの「Mainタブ＞該当ボスの戦闘ログ」を右クリック＞View Logsをクリック
 1. 「Copy All」を選択し、コピーしたブックのシート「logs」に貼り付け(右クリック→貼り付け)
