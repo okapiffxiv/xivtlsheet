@@ -1,6 +1,6 @@
 # xivtlsheet
 ACTのlogからタイムラインのスプレッドシートを作成します  
-![タイムライン](https://i.imgur.com/wd5v6Z6.png)
+![タイムライン](https://i.imgur.com/Wpwljta.png)
 
 
 # セットアップ
