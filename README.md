@@ -1,7 +1,7 @@
+# xivtlsheet
+ACTのlogからタイムラインのスプレッドシートを作成します  
 ![タイムライン](https://i.imgur.com/wd5v6Z6.png)
 
-# xivtlsheet
-ACTのlogからタイムラインを作成します
 
 # セットアップ
 - Googleアカウントにログイン
