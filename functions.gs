@@ -23,7 +23,7 @@ function　getTlValue(datas) {
   };
   
   for(var key in datas) {
-    data[key] = datas[key];
+    if (datas[key] != undefined) data[key] = datas[key];
   }
 
   return data;
@@ -157,6 +157,12 @@ function booName2Cell(event) {
 }
 
 
+// 無視するデバフ
+function booSkipDebuff(event) {
+  if(event == "衰弱" || event == "衰弱［強］") return true;
+  return false;
+}
+
 // 出力するタイムラインタイプはスキル回しか
 function booOutputTlSkill() {
   var sheet = SpreadsheetApp.getActive().getSheetByName(SHEET_SETTING);
@@ -262,4 +268,46 @@ function copyTempSheets_ (sheetName, toName) {
       }
     }
   }
+}
+
+
+// Logsパラメータ設定ダイアログ
+function dialogFflogs() {
+  var message = "https://www.fflogs.com/reports/【???????/#fight=数字】\nの【】の部分を入力";
+  var dialog = Browser.inputBox(message, Browser.Buttons.OK_CANCEL);
+  if (dialog != "cancel") return dialog;
+
+  return false;
+}
+
+
+// ジョブ選択ダイアログ
+function dialogJob(friendries) {
+  var message = "出力対象のジョブを以下から選択\\n\\n";
+  var job = "";
+  
+  for (var i in friendries) {
+    var type = friendries[i]["type"];
+    if (type == "LimitBreak") continue;
+    
+    job += type + "\\n";
+  }
+  message = message + job + "\\n";
+  
+  var dialog = Browser.inputBox(message, Browser.Buttons.OK_CANCEL);
+  if (dialog != "cancel") return getFriendryName(dialog, friendries);
+  
+  return false;
+}
+
+
+// logsのfriendriesから名前を返す
+function getFriendryName(job, friendries) {
+  for (var i in friendries) {
+    if (friendries[i]["type"] == job) {
+      return friendries[i]["name"];
+    }
+  }
+  
+  return false;
 }

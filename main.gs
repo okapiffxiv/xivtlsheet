@@ -30,12 +30,49 @@ function スキル回しに切り替え() {
 }
 
 // logsからインポート
-function FFLogsからEnemiesをインポート() {
-  new Convert2Enemy();
+function Logsからタイムラインをインポート() {
+  copyTempSheets_(TMP_ONLY);
+  new Convert2Fflogs(OUTPUT_TIMELINE);
 }
 
-function FFLogsからFriendriesをインポート() {
-  new Convert2Friends();
+function Logsからバフをインポート() {
+  copyTempSheets_(TMP_BUFF);
+  new Convert2Fflogs(OUTPUT_ALLBUFF);
+}
+
+function Logsからシナジーバフをインポート() {
+  copyTempSheets_(TMP_RAIDBUFF);
+  new Convert2Fflogs(OUTPUT_RAIDBUFF);
+}
+
+function Logsから詩人情報をインポート() {
+  copyTempSheets_(TMP_BRD);
+  new Convert2Fflogs(OUTPUT_BRDBUFF, "Bard");
+}
+
+function Logsからモンク情報をインポート() {
+  copyTempSheets_(TMP_MNK);
+  new Convert2Fflogs(OUTPUT_MNKBUFF, "Monk");
+}
+
+function Logsから竜情報をインポート() {
+  copyTempSheets_(TMP_DRG);
+  new Convert2Fflogs(OUTPUT_DRGBUFF, "Dragoon");
+}
+
+function Logsから召喚情報をインポート() {
+  copyTempSheets_(TMP_SMN);
+  new Convert2Fflogs(OUTPUT_SMNBUFF, "Summoner");
+}
+
+function Logsから戦士情報をインポート() {
+  copyTempSheets_(TMP_WAR);
+  new Convert2Fflogs(OUTPUT_WARBUFF, "Warrior");
+}
+
+function Logsからナイト情報をインポート() {
+  copyTempSheets_(TMP_PLD);
+  new Convert2Fflogs(OUTPUT_PLDBUFF, "Paladin");
 }
 
 

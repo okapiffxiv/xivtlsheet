@@ -11,7 +11,7 @@ function RAIDBUFF_OutputBuffCol(who, whom, type, event, userName) {
     col = baseCol + 1;
   } else if((type == AC_LOSE_EFFECT || type == AC_ACTION) && event == "連環計") {
     col = baseCol + 2;
-  } else if(whom == userName && (type == AC_LOSE_EFFECT || type == AC_AOE) && event == "エギの加護") {
+  } else if(whom == userName && (type == AC_LOSE_EFFECT || type == AC_AOE || type == AC_EFFECT) && event == "エギの加護") {
     col = baseCol + 3;
   } else if(whom == userName && (type == AC_LOSE_EFFECT || type == AC_EFFECT) && (event == "竜の右眼" || event == "竜の左眼")) {
     col = baseCol + 4;
@@ -25,7 +25,7 @@ function RAIDBUFF_OutputBuffCol(who, whom, type, event, userName) {
     col = baseCol + 7;
   } else if((who == userName || whom == userName) && (type == AC_LOSE_EFFECT || type == AC_EFFECT) && event == "バトルボイス") {
     col = baseCol + 8;
-  } else if(whom == userName && (type == AC_LOSE_EFFECT || type == AC_AOE) && event == "アーゼマの均衡") {
+  } else if(whom == userName && (type == AC_LOSE_EFFECT || type == AC_AOE　|| type == AC_ACTION) && event == "アーゼマの均衡") {
     col = baseCol + 9;
   } else if(whom == userName && (type == AC_LOSE_EFFECT || type == AC_EFFECT) && event == "強化薬") {
     col = baseCol + 10;

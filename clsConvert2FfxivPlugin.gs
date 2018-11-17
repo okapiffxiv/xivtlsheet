@@ -166,7 +166,7 @@ Convert2FfxivPlugin.prototype.parseLine = function(data) {
     val["whom"] = text.replace(/^1A:(.*)\sgains.*$/g, "$1");
     
     // 衰弱は無視
-    if(val["event"] == "衰弱" || val["event"] == "衰弱［強］") val["event"] = EVENT_UNKNOWN;
+    if(booSkipDebuff(val["event"])) val["event"] = EVENT_UNKNOWN;
 
   } else if(val["type"] == "1B") {
     // マーカー
@@ -244,7 +244,6 @@ Convert2FfxivPlugin.prototype.parseLine = function(data) {
     val["event"] = EVENT_UNKNOWN;
     return val;
   }
-
   
   return val;
 }

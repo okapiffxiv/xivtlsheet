@@ -42,7 +42,7 @@ Heal_OutputBuff.prototype.Barrier = function (who, type, event, whom) {
   var col = null;
   var baseCol = this.baseCol;
   
-  if((type == AC_ACTION && event == "挑発") || (type == AC_AOE && event == "アルティメイタム")) {
+  if((type == AC_ACTION && event == "挑発") || ((type == AC_ACTION || type == AC_AOE) && event == "アルティメイタム")) {
     col = 1;
   } else if((type == AC_EFFECT || type == AC_LOSE_EFFECT) && event == "ランパート") {
     col = 2;
@@ -80,9 +80,9 @@ Heal_OutputBuff.prototype.BarrierAll = function (who, type, event, whom) {
   var col = null;
   var baseCol = this.baseCol + CNT_BARRIER_COL;
 
-  if(type == AC_ACTION && event == "ディヴァインヴェール") {
+  if(whom == this.userName && (type == AC_EFFECT || type == AC_LOSE_EFFECT) && event == "ディヴァインヴェール［バリア］") {
     col = 1;
-  } else if(whom == this.userName && type == AC_AOE && event == "シェイクオフ") {
+  } else if(whom == this.userName && (type == AC_EFFECT || type == AC_LOSE_EFFECT) && event == "シェイクオフ") {
     col = 2;
   } else if(whom == this.userName && (type == AC_EFFECT || type == AC_LOSE_EFFECT) && event.match(/^トルバドゥール：/) ) {
     col = 3;
@@ -118,7 +118,7 @@ Heal_OutputBuff.prototype.WHM = function (who, type, event, whom) {
   var col = null;
   var baseCol = this.baseCol + CNT_BARRIER_COL + CNT_BARRIERALL_COL + CNT_DOWN_COL;
 
-  if (whom == this.userName && (type == AC_EFFECT || type == AC_LOSE_EFFECT) && event == "メディカラ") {
+  if (whom == this.userName && (type == AC_REFRESH ||type == AC_EFFECT || type == AC_LOSE_EFFECT) && event == "メディカラ") {
     col = 1;
   } else if(type == AC_ACTION && event == "ケアルラ") {
     col = 2;
@@ -126,15 +126,15 @@ Heal_OutputBuff.prototype.WHM = function (who, type, event, whom) {
     col = 3;
   } else if(type == AC_ACTION && event == "テトラグラマトン") {
     col = 4;
-  } else if((type == AC_AOE || type == AC_LOSE_EFFECT) && event == "アサイラム") {
+  } else if((type == AC_AOE || type == AC_ACTION || type == AC_LOSE_EFFECT) && event == "アサイラム") {
     col = 5;
-  } else if(whom == this.userName && type == AC_AOE && event == "アサイズ") {
+  } else if(whom == this.userName && (type == AC_EFFECT || type == AC_AOE) && event == "アサイズ") {
     col = 6;
-  } else if(whom == this.userName && type == AC_AOE && event == "ケアルガ") {
+  } else if(whom == this.userName && (type == AC_EFFECT || type == AC_AOE) && event == "ケアルガ") {
     col = 7;
-  } else if(whom == this.userName && type == AC_AOE && event == "メディカ") {
+  } else if(whom == this.userName && (type == AC_EFFECT || type == AC_AOE) && event == "メディカ") {
     col = 8;
-  } else if(whom == this.userName && (type == AC_EFFECT || type == AC_LOSE_EFFECT) && event == "インドゥルゲンティア") {
+  } else if(whom == this.userName && (type == AC_REFRESH ||type == AC_EFFECT || type == AC_LOSE_EFFECT) && event == "インドゥルゲンティア") {
     col = 9;
   }
   
@@ -147,19 +147,19 @@ Heal_OutputBuff.prototype.AST = function (who, type, event, whom) {
   var col = null;
   var baseCol = this.baseCol + CNT_BARRIER_COL + CNT_BARRIERALL_COL + CNT_DOWN_COL + CNT_WHM_COL;
 
-  if(whom == this.userName && type == AC_AOE && event == "ヘリオス") {
+  if(whom == this.userName && type != AC_START_USING && event == "ヘリオス") {
     col = 1;
   } else if(type == AC_ACTION && event == "ディグニティ") {
     col = 2;
   } else if(type == AC_ACTION && event == "ベネフィラ") {
     col = 3;
-  } else if(whom == this.userName && (type == AC_EFFECT || type == AC_LOSE_EFFECT) && event == "アスペクト・ヘリオス") {
+  } else if(whom == this.userName && (type == AC_REFRESH || type == AC_EFFECT || type == AC_LOSE_EFFECT) && event == "アスペクト・ヘリオス") {
     col = 4;
   } else if((type == AC_EFFECT || type == AC_LOSE_EFFECT) && event == "シナストリー［被］") {
     col = 5;
-  } else if((type == AC_ACTION || type == AC_LOSE_EFFECT) && event == "運命の輪") {
+  } else if(who == whom && (type == AC_EFFECT || type == AC_LOSE_EFFECT) && event == "運命の輪") {
     col = 6;
-  } else if(type == AC_AOE && (event == "アーサリースター" || event == "ステラデトネーション")) {
+  } else if(event == "アーサリースター" || event == "ステラデトネーション" || event == "ステラバースト") {
     col = 7;
   } else if(type == AC_ACTION && event == "クラウンレディ") {
     col = 8;
@@ -173,13 +173,13 @@ Heal_OutputBuff.prototype.SCH = function (who, type, event, whom) {
   var col = null;
   var baseCol = this.baseCol + CNT_BARRIER_COL + CNT_BARRIERALL_COL + CNT_DOWN_COL + CNT_WHM_COL + CNT_AST_COL;
 
-  if((type == AC_AOE || type == AC_LOSE_EFFECT) && event == "野戦治療の陣") {
+  if((type == AC_ACTION || type == AC_AOE || type == AC_LOSE_EFFECT) && event == "野戦治療の陣") {
     col = 1;
   } else if((type == AC_EFFECT || type == AC_LOSE_EFFECT) && event == "フェイユニオン［被］") {
     col = 2;
   } else if((type == AC_EFFECT || type == AC_LOSE_EFFECT) && event == "深謀遠慮の策") {
     col = 3;
-  } else if(whom == this.userName && type == AC_AOE && event == "士気高揚の策") {
+  } else if(whom == this.userName && event == "士気高揚の策") {
     col = 4;
   } else if(type == AC_ACTION && event == "鼓舞激励の策") {
     col = 5;
@@ -187,7 +187,7 @@ Heal_OutputBuff.prototype.SCH = function (who, type, event, whom) {
     col = 6;
   } else if(type == AC_ACTION && event == "生命活性法") {
     col = 7;
-  } else if (whom == this.userName && type == AC_AOE && event == "不撓不屈の策") {
+  } else if (whom == this.userName &&  event == "不撓不屈の策") {
     col = 8;
   } else if (whom == this.userName && (type == AC_EFFECT || type == AC_LOSE_EFFECT) && event == "光の囁き") {
     col = 9;

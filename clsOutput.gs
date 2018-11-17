@@ -173,8 +173,13 @@ clsOutput.prototype.outputallbuff = function(sheet, startRow, vals) {
       }
       
       // エクセルに出力
-      if(vals["type"] == AC_LOSE_EFFECT || vals["event"] == "ステラデトネーション") {
-          this.outputLoseEffect(sheet, row, col);
+      if(vals["type"] == AC_LOSE_EFFECT || vals["event"] == "ステラデトネーション"　|| vals["event"] == "ステラバースト") {
+        this.outputLoseEffect(sheet, row, col);
+        
+      } else if(vals["type"] == AC_REFRESH) {
+        sheet.getRange(row, col).setValue(1);
+        this.outputPadCell(sheet, row, col);
+        
       } else {
         
         vals["who"] = vals["who"].replace(/\s.*$/, "");
@@ -231,12 +236,22 @@ clsOutput.prototype.outputLoseEffect = function(sheet, row, col) {
 // 上に向かって1以上が出るまでセルを埋める
 clsOutput.prototype.outputPadCell = function(sheet, lastRow, col) {
   var value = null;
-  var cells = sheet.getRange(oStartRow, col, lastRow - oStartRow, 1).getValues();
+  var rowLen = lastRow - oStartRow;
+  if (rowLen <= 0) return;
+    
+  var cells = sheet.getRange(oStartRow, col, rowLen, 1).getValues();
   var cntCell = cells.length;
   var cntRows = 0;
   
   for(var i = cntCell - 1; i >= 0; i--){
     var data = cells[i][0];
+    
+    // 0が出たときは無効
+    if (typeof data == "number" && data == 0) {
+      cntRows = 0;
+      break;
+    }
+    
     if((typeof data == "number" && data > 0) || (typeof data == "string" && data != "")) {
       value = data;
       break; 

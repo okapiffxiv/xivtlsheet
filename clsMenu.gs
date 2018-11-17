@@ -10,7 +10,7 @@ var Menu = function () {
   if(!booOutputTlSkill()) booTlSkill = "";
   
   menu.addSubMenu(
-    ui.createMenu("タイムライン作成")
+    ui.createMenu("ACTのLogから作成")
     .addItem("タイムラインのみ", "タイムラインをインポート")
     .addItem("ヒール＆軽減", "バフをインポート")
     .addItem("シナジーバフ", "シナジーバフをインポート")
@@ -21,10 +21,22 @@ var Menu = function () {
     .addItem("戦士", "戦士情報をインポート")
     .addItem("ナイト", "ナイト情報をインポート")
   );
+  menu.addSubMenu(
+    ui.createMenu("FFLogsから作成")
+    .addItem("タイムラインのみ", "Logsからタイムラインをインポート")
+    .addItem("ヒール＆軽減", "Logsからバフをインポート")
+    .addItem("シナジーバフ", "Logsからシナジーバフをインポート")
+    .addItem("詩人", "Logsから詩人情報をインポート")
+    .addItem("モンク", "Logsからモンク情報をインポート")
+    .addItem("竜", "Logsから竜情報をインポート")
+    .addItem("召喚", "Logsから召喚情報をインポート")
+    .addItem("戦士", "Logsから戦士情報をインポート")
+    .addItem("ナイト", "Logsからナイト情報をインポート")
+  );
   menu.addSeparator();  
-  menu.addItem("ユーザ設定（"+ getUserName() +"）", "ユーザ名設定");
   menu.addItem("スキル回しに切り替え " + booTlSkill, "スキル回しに切り替え");
   menu.addSeparator();  
+  menu.addItem("ユーザ設定（"+ getUserName() +"）", "ユーザ名設定");
   menu.addItem("ViewLogを出力", "ViewLogをインポート")
   menu.addItem("logsシートをリセット", "Logsシートをリセット")
 
