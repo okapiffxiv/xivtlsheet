@@ -1,5 +1,5 @@
 # xivtlsheet
-ACTのlogからFF14零式コンテンツ用のタイムラインのスプレッドシートを作成します　　
+ACTのlog、FFLogsからFF14零式コンテンツ用のタイムラインのスプレッドシートを作成します　　
 ![タイムライン](https://i.imgur.com/Wpwljta.png)
 
 ### セットアップ
