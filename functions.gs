@@ -11,6 +11,15 @@ function getOutputTo(tmpName) {
   }
 }
 
+// outputtypeをみてstartrowを判断
+function getStartRow(tmpName) {
+  if(OUTPUT_ALLBUFF == tmpName) {
+    return allStartRow;
+  } else {
+    return oStartRow;
+  }
+}
+
 // タイムライン式のデータを返す
 function　getTlValue(datas) {
   var data = {
@@ -35,8 +44,8 @@ function booOutputTypeJob(outputType) {
   return obj.getoutputTypeJob();
 }
 
-// エギかどうか
-function booEgi(who) {
+// Petかどうか
+function booPet(who) {
   if (typeof who != "string" || who == null || who == "") return false;
   return who.match(/(カーバンクル|タレット|エギ|フェアリー|デミ・バハムート)/);
 }
@@ -44,7 +53,7 @@ function booEgi(who) {
 // 敵かどうか
 function booEnemy(who) {
   if (typeof who != "string" || who == null || who == "") return false;
-  return !who.match(/\s/) && !booEgi(who) && !who.match(/アーサリースター/);
+  return !who.match(/\s/) && !booPet(who) && !who.match(/アーサリースター/);
 }
 
 // オートアタックか
@@ -141,14 +150,17 @@ function booName2Cell(event) {
   if (event == "インターベンション" || 
       event == "かばう" || 
       event == "ブラックナイト" || 
-      event == "アポカタスタシス"|| 
-      event == "ベネディクション"|| 
-      event == "テトラグラマトン"|| 
-      event == "ディヴァインベニゾン"|| 
-      event == "生命活性法"||
-      event == "ディグニティ"||
-      event == "フェイユニオン［被］"||
-      event == "深謀遠慮の策") {
+      event == "アポカタスタシス" || 
+      event == "ベネディクション" || 
+      event == "テトラグラマトン" || 
+      event == "ディヴァインベニゾン" || 
+      event == "生命活性法" ||
+      event == "ディグニティ" ||
+      event == "フェイユニオン［被］" ||
+      event == "深謀遠慮の策" ||
+      event == "地神のミンネ" ||
+      event == "ベネフィラ" ||
+      event == "挑発") {
   
     return true;
   }
@@ -176,28 +188,28 @@ function booOutputTlSkill() {
 }
 
 // 行を削除
-function deleteRows(sheetName) {
+function deleteRows(sheetName, startRow) {
   var sheet = SpreadsheetApp.getActive().getSheetByName(sheetName);
   if(sheet == null) return;
   var lastRow = sheet.getLastRow();
   var lastCol = sheet.getLastColumn();
   
   if (lastRow > 1) {
-    sheet.deleteRows(oStartRow + 1, lastRow - oStartRow);
-    sheet.getRange(oStartRow, 1, 1, lastCol).clearContent();
+    sheet.deleteRows(startRow + 1, lastRow - startRow);
+    sheet.getRange(startRow, 1, 1, lastCol).clearContent();
   }
 }
 
 // バフ欄をクリア
-function clearBuffs(sheetName) {
+function clearBuffs(sheetName, startRow) {
   var sheet = SpreadsheetApp.getActive().getSheetByName(sheetName);
   if(sheet == null) return;
   var lastRow = sheet.getLastRow();
   var lastCol = sheet.getLastColumn();
   var startCol = CNT_TIMELINE_COL + 1;
   
-  if (lastRow <= oStartRow) return;
-  sheet.getRange(oStartRow, startCol, lastRow - oStartRow, lastCol - startCol).clearContent();
+  if (lastRow <= startRow) return;
+  sheet.getRange(startRow, startCol, lastRow - startRow, lastCol - startCol).clearContent();
 }
 
 // タイムラインか
@@ -293,16 +305,19 @@ function dialogJob(friendries) {
     job += type + "\\n";
   }
   message = message + job + "\\n";
+  message = message + "選択しない場合は【" + type + "】で出力"
   
   var dialog = Browser.inputBox(message, Browser.Buttons.OK_CANCEL);
-  if (dialog != "cancel") return getFriendryName(dialog, friendries);
+  if (dialog != "cancel") return getFriendryName(dialog, friendries, type);
   
   return false;
 }
 
 
 // logsのfriendriesから名前を返す
-function getFriendryName(job, friendries) {
+function getFriendryName(job, friendries, jobDef) {
+  if (job == "") job = jobDef;
+  
   for (var i in friendries) {
     if (friendries[i]["type"] == job) {
       return friendries[i]["name"];

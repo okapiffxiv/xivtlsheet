@@ -2,8 +2,9 @@
 // 出力クラス
 ////////////////////////////////////////
 
-var clsOutput = function(outputType, tlType, userName) {
+var clsOutput = function(outputType, startRow, tlType, userName) {
   this.outputType = outputType;
+  this.startRow = startRow;
   this.tlType = tlType
   this.userName = userName;
 }
@@ -88,7 +89,7 @@ clsOutput.prototype.outputTimeline = function(sheet, vals) {
   // シートに書き込み
   var cntTlCol = CNT_TIMELINE_COL;
   if(this.outputType == OUTPUT_LOG) cntTlCol = cntTlCol + 1;  
-  sheet.getRange(oStartRow,1, valLen, cntTlCol).setValues(oVals);
+  sheet.getRange(this.startRow,1, valLen, cntTlCol).setValues(oVals);
 }
 
 
@@ -134,9 +135,9 @@ clsOutput.prototype.booContinue = function(oValues, val) {
 
 
 // タイムラインにバフを出力
-clsOutput.prototype.outputallbuff = function(sheet, startRow, vals) {
+clsOutput.prototype.outputallbuff = function(sheet, startRow, vals, jobs) {
   var lastRow = sheet.getLastRow();
-  var col = this.outputBuffCol(vals);
+  var col = this.outputBuffCol(vals, jobs);
   var secTime = time2Sec(vals["time"]);
   
   if (col == null) return startRow;
@@ -181,19 +182,16 @@ clsOutput.prototype.outputallbuff = function(sheet, startRow, vals) {
         this.outputPadCell(sheet, row, col);
         
       } else {
-        
         vals["who"] = vals["who"].replace(/\s.*$/, "");
         vals["whom"]  = vals["whom"].replace(/\s.*$/, "");
         var cValue = null;
-        
+  
+
         if (booName2Cell(vals["event"])) {
           cValue = vals["whom"];
         
-        } else if (vals["event"] == "挑発") {
-          cValue = vals["whom"] +"←"+ vals["who"];
-        
         } else if (vals["event"] == "アルティメイタム") {
-          cValue = vals["who"];
+          cValue = 2;
 
         } else if (this.outputType == OUTPUT_BRDBUFF && BRD_SongValue(vals["event"]) != null) {
           cValue = BRD_SongValue(vals["event"]);
@@ -213,8 +211,8 @@ clsOutput.prototype.outputallbuff = function(sheet, startRow, vals) {
       }
       
       // 現在のrowの2つ上のrowを返す(何故かlogが順番が前後しているパターンが稀にあるため)
-      if(row <= oStartRow + 1) {
-        return oStartRow;
+      if(row <= startRow + 1) {
+        return startRow;
       } else {
         return row - 2;
       }
@@ -236,10 +234,10 @@ clsOutput.prototype.outputLoseEffect = function(sheet, row, col) {
 // 上に向かって1以上が出るまでセルを埋める
 clsOutput.prototype.outputPadCell = function(sheet, lastRow, col) {
   var value = null;
-  var rowLen = lastRow - oStartRow;
+  var rowLen = lastRow - this.startRow;
   if (rowLen <= 0) return;
     
-  var cells = sheet.getRange(oStartRow, col, rowLen, 1).getValues();
+  var cells = sheet.getRange(this.startRow, col, rowLen, 1).getValues();
   var cntCell = cells.length;
   var cntRows = 0;
   
@@ -267,7 +265,7 @@ clsOutput.prototype.outputPadCell = function(sheet, lastRow, col) {
 }
 
 // 出力するバフの横軸の値を返す
-clsOutput.prototype.outputBuffCol = function(val) {
+clsOutput.prototype.outputBuffCol = function(val, jobs) {
   var col     = null;
   var baseCol = CNT_TIMELINE_COL;
   var who     = val["who"];
@@ -287,7 +285,7 @@ clsOutput.prototype.outputBuffCol = function(val) {
   
   } else {
     // ヒール系
-    var objHealBuff = new Heal_OutputBuff(this.outputType, who, whom, type, event, this.userName);
+    var objHealBuff = new Heal_OutputBuff(this.outputType, who, whom, type, event, this.userName, jobs);
     var healCol = objHealBuff.getCol();
     if(healCol != null) col = healCol;
   

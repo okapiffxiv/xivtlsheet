@@ -6,15 +6,18 @@ var Convert2FfxivPlugin = function(outputType) {
   // 出力する対象
   this.outputType = outputType;
   
+  // startRow
+  this.startRow = getStartRow(outputType);
+  
   // 出力するタイムライン
   this.tlType = OUTPUT_TIMELINE;
   if (booOutputTlSkill()) this.tlType = OUTPUT_SKILL;
 
   // ユーザ名
   this.userName = getUserName();
-
+  
   // 出力クラス
-  this.clsOutput = new clsOutput(this.outputType,　this.tlType, this.userName);
+  this.clsOutput = new clsOutput(this.outputType, this.startRow,　this.tlType, this.userName);
   
   // シート名
   if (this.outputType == OUTPUT_LOG) {
@@ -51,12 +54,14 @@ Convert2FfxivPlugin.prototype.data2Parse = function() {
 
   // シートをクリア
   if(booOutputToTL(this.outputType)) {
-    deleteRows(this.sheetName);
+    deleteRows(this.sheetName, this.startRow);
   } else {
-    clearBuffs(this.sheetName);
+    clearBuffs(this.sheetName, this.startRow);
   }
   
   // Logのデータを１行ずつループ
+  var logs = [];
+  var jobs = [];
   for(var rowNum=1;rowNum<iLastRow;rowNum++) {
     var data  = this.parseLine(iValues[rowNum][0]);
     
@@ -72,24 +77,39 @@ Convert2FfxivPlugin.prototype.data2Parse = function() {
       "log"  : data["log"]
     });
     
-    
+    val["timeline"] = data["timeline"];
+
+        
     // 配列に追加
-    if (this.tlType == OUTPUT_TIMELINE && data["timeline"]) {
-      if (!this.clsOutput.booContinue(oValues, val)) oValues.push(val);
-      
-    } else {
-      if (this.tlType == OUTPUT_SKILL) {
-        if (!this.clsOutput.booContinue(oValues, val)) oValues.push(val);
-      }
-      if (this.outputType != OUTPUT_TIMELINE && this.outputType != OUTPUT_LOG) {
-        if (this.clsOutput.outputBuffCol(val) != null) oBuffs.push(val);
-      }
-    }
+    logs.push(val);
     
+    // job選別
+    var job = this.setJob(val["who"], val["event"]);
+    if (job != null) jobs[val["who"]] = job;
+
     // Combat Endが出た時点でループ終了
     if(this.endTime != null) break;
   }
   
+
+  // フィルタリング
+  for (var idx in logs) {
+    var log = logs[idx];
+
+    if (this.tlType == OUTPUT_TIMELINE && log["timeline"]) {
+      if (!this.clsOutput.booContinue(oValues, log)) oValues.push(log);
+      
+    } else {
+      if (this.tlType == OUTPUT_SKILL) {
+        if (!this.clsOutput.booContinue(oValues, log)) oValues.push(log);
+      }
+      if (this.outputType != OUTPUT_TIMELINE && this.outputType != OUTPUT_LOG) {
+        if (this.clsOutput.outputBuffCol(log, jobs) != null) oBuffs.push(log);
+      }
+    }
+  }
+  
+
   // 終了時間の設定
   if(this.endTime == null && oValues.length > 0) {
     this.endTime = oValues[oValues.length - 1]["time"];
@@ -98,11 +118,11 @@ Convert2FfxivPlugin.prototype.data2Parse = function() {
       "type": AC_FAILED
     }));
   }
-  
+
   // シートに書き込み
   objSheet = SpreadsheetApp.getActive().getSheetByName(this.sheetName);
   this.outputOValue(objSheet, oValues);
-  this.outputOBuff(objSheet, oBuffs);
+  this.outputOBuff(objSheet, oBuffs, jobs);
 }
 
 
@@ -112,12 +132,12 @@ Convert2FfxivPlugin.prototype.outputOValue = function(sheet, datas) {
 }
 
 // BUFF欄に出力
-Convert2FfxivPlugin.prototype.outputOBuff = function(sheet, datas) {
-  var startRow = oStartRow;
+Convert2FfxivPlugin.prototype.outputOBuff = function(sheet, datas, jobs) {
+  var startRow = this.startRow;
   var oLastRow = datas.length;
   
   for(var rowNum=0;rowNum<oLastRow;rowNum++) { 
-    startRow = this.clsOutput.outputallbuff(sheet, startRow, datas[rowNum]);
+    startRow = this.clsOutput.outputallbuff(sheet, startRow, datas[rowNum], jobs);
   }
 }
 
@@ -209,7 +229,7 @@ Convert2FfxivPlugin.prototype.parseLine = function(data) {
     val["whom"]   = text.replace(/^1E:(.*)\sloses\s.*$/, "$1");
     
     // エギ又はenemyは無視
-    if(booEgi(val["whom"])) val["event"] = EVENT_UNKNOWN;
+    if(booPet(val["whom"])) val["event"] = EVENT_UNKNOWN;
     
   } else {
     val["event"] = EVENT_UNKNOWN;
@@ -246,4 +266,43 @@ Convert2FfxivPlugin.prototype.parseLine = function(data) {
   }
   
   return val;
+}
+
+
+// ジョブの判別
+Convert2FfxivPlugin.prototype.setJob = function(who, event) {
+  // すでに設定済みか
+  if (event == "ファストブレード") {
+    return "Paladin";
+  } else if (event == "ヘヴィスウィング") {
+    return "Warrior";
+  } else if (event == "ハードスラッシュ") {
+    return "Darkknight";
+  } else if (event == "リジェネ") {
+    return "Whitemage";
+  } else if (event == "鼓舞激励の策") {
+    return "Scholar";
+  } else if (event == "アスペクト・ベネフィク") {
+    return "Astrologian";
+  } else if (event == "連撃") {
+    return "Monk";
+  } else if (event == "トゥルースラスト") {
+    return "Dragoon";
+  } else if (event == "双刃旋") {
+    return "Ninja";
+  } else if (event == "刃風") {
+    return "Samurai";
+  } else if (event == "ヘヴィショット") {
+    return "Bard";
+  } else if (event == "スプリットショット") {
+    return "Machinist";
+  } else if (event == "エノキアン") {
+    return "Blackmage";
+  } else if (event == "ミアズマバースト") {
+    return "Summoner";
+  } else if (event == "マナフィケーション") {
+    return "Redmage";
+  }
+  
+  return null;
 }

@@ -1,3 +1,7 @@
+////////////////////////////////////////
+// FFLogsからタイムラインを作成
+////////////////////////////////////////
+
 var Convert2Fflogs = function(outputType, job) {
   // バトルログを取得
   var fightCode = dialogFflogs();
@@ -7,6 +11,9 @@ var Convert2Fflogs = function(outputType, job) {
   
   // 出力する対象
   this.outputType = outputType;
+
+  // startRow
+  this.startRow = getStartRow(outputType);
   
   // 出力するタイムライン
   this.tlType = OUTPUT_TIMELINE;
@@ -54,9 +61,9 @@ Convert2Fflogs.prototype.data2Parse = function(logCode, fId, jobName) {
   this.endTime   = fight["end_time"];
   
   // sourceIdの取得
-  this.friendlies = this.getPartyData("friendlies", jsonFights);
-  this.friendlyPets = this.getPartyData("friendlyPets", jsonFights);
-  this.enemies = this.getPartyData("enemies", jsonFights);
+  this.friendlies = this.getPartyData("friendlies", jsonFights, fId);
+  this.friendlyPets = this.getPartyData("friendlyPets", jsonFights, fId);
+  this.enemies = this.getPartyData("enemies", jsonFights, fId);
   
   // ユーザの設定
   if (jobName == undefined) {
@@ -66,8 +73,11 @@ Convert2Fflogs.prototype.data2Parse = function(logCode, fId, jobName) {
   }
   if (!this.userName) return false;
   
+  // Job {user : job}
+  var jobs = this.getPartyJob("friendlies", jsonFights, fId);
+  
   // 出力クラス
-  this.clsOutput = new clsOutput(this.outputType,　this.tlType, this.userName);
+  this.clsOutput = new clsOutput(this.outputType, this.startRow,　this.tlType, this.userName);
 
   
   var startTime = this.startTime;
@@ -78,9 +88,9 @@ Convert2Fflogs.prototype.data2Parse = function(logCode, fId, jobName) {
 
   // シートをクリア
   if(booOutputToTL(this.outputType)) {
-    deleteRows(this.sheetName);
+    deleteRows(this.sheetName, this.startRow);
   } else {
-    clearBuffs(this.sheetName);
+    clearBuffs(this.sheetName, this.startRow);
   }
   
   // 開始時間のセット
@@ -88,6 +98,7 @@ Convert2Fflogs.prototype.data2Parse = function(logCode, fId, jobName) {
 
 
   // logを抽出
+  var logs = [];
   while(startTime != undefined) {
     var response = UrlFetchApp.fetch(LOGS_HOST + "report/events/" + logCode + "?start=" + startTime + "&end=" + endTime + "&translate=true&api_key=" + LOGS_KEY);
     var jsonEvents = JSON.parse(response.getContentText());
@@ -109,6 +120,11 @@ Convert2Fflogs.prototype.data2Parse = function(logCode, fId, jobName) {
       
       var ability = event["ability"]["name"];
       if (ability == "" || booSkipDebuff(ability)) continue;
+      
+      if (event["ability"]["name"] == "ヘリオス") {
+        Logger.log(event);
+      }
+
       
       var who  = "";
       var sourceId = event["sourceID"];
@@ -140,25 +156,29 @@ Convert2Fflogs.prototype.data2Parse = function(logCode, fId, jobName) {
         "event": ability
       });
       
-      if (event["ability"]["name"].match(/踏鳴/)) {
-        Logger.log(event);
-      }
+      val["booFriendly"] = event["sourceIsFriendly"];
       
-            
       // 配列に追加
-      if (this.tlType == OUTPUT_TIMELINE && !event["sourceIsFriendly"]) {
-        if (val["type"] == AC_LOSE_EFFECT) continue;
-        if (!this.clsOutput.booContinue(oValues, val)) oValues.push(val);
-        
-      } else {
-        if (this.tlType == OUTPUT_SKILL) {
-          if (!this.clsOutput.booContinue(oValues, val)) oValues.push(val);
-        }
-        if (this.outputType != OUTPUT_TIMELINE && this.outputType != OUTPUT_LOG) {
-          if (this.clsOutput.outputBuffCol(val) != null) oBuffs.push(val);
-        }
-      }
+      logs.push(val);
+    }
+  }
 
+  
+  // フィルタリング
+  for (var idx in logs) {
+    var log = logs[idx];
+    
+    if (this.tlType == OUTPUT_TIMELINE && !log["booFriendly"]) {
+      if (log["type"] == AC_LOSE_EFFECT) continue;
+      if (!this.clsOutput.booContinue(oValues, log)) oValues.push(log);
+      
+    } else {
+      if (this.tlType == OUTPUT_SKILL) {
+        if (!this.clsOutput.booContinue(oValues, log)) oValues.push(log);
+      }
+      if (this.outputType != OUTPUT_TIMELINE && this.outputType != OUTPUT_LOG) {
+        if (this.clsOutput.outputBuffCol(log, jobs) != null) oBuffs.push(log);
+      }
     }
   }
   
@@ -169,7 +189,7 @@ Convert2Fflogs.prototype.data2Parse = function(logCode, fId, jobName) {
   // シートに書き込み
   objSheet = SpreadsheetApp.getActive().getSheetByName(this.sheetName);
   this.outputOValue(objSheet, oValues);
-  this.outputOBuff(objSheet, oBuffs);
+  this.outputOBuff(objSheet, oBuffs, jobs);
 }
 
 
@@ -179,23 +199,51 @@ Convert2Fflogs.prototype.outputOValue = function(sheet, datas) {
 }
 
 // BUFF欄に出力
-Convert2Fflogs.prototype.outputOBuff = function(sheet, datas) {
-  var startRow = oStartRow;
+Convert2Fflogs.prototype.outputOBuff = function(sheet, datas, jobs) {
+  var startRow = this.startRow;
   var oLastRow = datas.length;
   
   for(var rowNum=0;rowNum<oLastRow;rowNum++) { 
-    startRow = this.clsOutput.outputallbuff(sheet, startRow, datas[rowNum]);
+    startRow = this.clsOutput.outputallbuff(sheet, startRow, datas[rowNum], jobs);
   }
 }
 
 
-Convert2Fflogs.prototype.getPartyData = function(key, json) {
+Convert2Fflogs.prototype.getPartyData = function(key, json, fId) {
   var values = json[key];
   var ids = {};
   
   for (var idx in values) {
     var value = values[idx];
-    ids[value["id"]] = {"name": value["name"], "type": value["type"]};
+    
+    for (var fKey in value["fights"]) {
+      var fight = value["fights"][fKey];
+      
+      if (fight["id"] == fId) {
+        ids[value["id"]] = {"name": value["name"], "type": value["type"]};
+        break;
+      }
+    }
+  }
+
+  return ids;
+}
+
+Convert2Fflogs.prototype.getPartyJob = function(key, json, fId) {
+  var values = json[key];
+  var ids = {};
+  
+  for (var idx in values) {
+    var value = values[idx];
+
+    for (var fKey in value["fights"]) {
+      var fight = value["fights"][fKey];
+      
+      if (fight["id"] == fId) {
+        ids[value["name"]] = value["type"];
+        break;
+      }
+    }
   }
 
   return ids;
@@ -210,8 +258,8 @@ Convert2Fflogs.prototype.getType = function(event) {
     return AC_AOE;
   } else if(type == "cast") {
     return AC_ACTION;
-//  } else if(type == "heal") {
-//    return AC_ACTION;
+  } else if(type == "heal" && event["targetID"] != undefined && event["targetIsFriendly"]) {
+    return AC_EFFECT;
   } else if(type == "applybuff" || type == "applydebuff" || type == "applybuffstack") {
     return AC_EFFECT;
   } else if (type == "refreshbuff" || type == "refreshdebuff") {

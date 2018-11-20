@@ -56,10 +56,12 @@ Job_OutputBuff.prototype.BRD = function(type, event) {
     col = 2;
   } else if(type == AC_ACTION && event == "アイアンジョー") {
     col = 3;
-  } else if(type == AC_ACTION && event == "サイドワインダー") {
+  } else if(type == AC_ACTION && event == "エンピリアルアロー") {
     col = 4;
-  } else if((type == AC_LOSE_EFFECT || type == AC_EFFECT) && event == "タクティシャン") {
+  } else if(type == AC_ACTION && event == "サイドワインダー") {
     col = 5;
+  } else if((type == AC_LOSE_EFFECT || type == AC_EFFECT) && event == "タクティシャン") {
+    col = 6;
   }
   
   if (col != null) col = this.baseCol + col;
@@ -170,7 +172,7 @@ Job_OutputBuff.prototype.PLD = function(type, event) {
     col = 1;
   } else if(type == AC_ACTION && event == "レイジ・オブ・ハルオーネ") {
     col = 2;
-  } else if(type == AC_ACTION && event == "ゴアブレード") {
+  } else if((type == AC_ACTION || type == AC_REFRESH) && event == "ゴアブレード") {
     col = 3;
   } else if(type == AC_ACTION && event == "ロイヤルアソリティ") {
     col = 4;
@@ -194,18 +196,18 @@ Job_OutputBuff.prototype.SMN = function(who, type, event, whom) {
   var col = null; 
 
   if((
-    (booEgi(who) && type == AC_EFFECT) ||
+    (booPet(who) && type == AC_EFFECT) ||
     (booEnemy(whom) && type == AC_LOSE_EFFECT)) && event == "被魔法ダメージ増加") {
     col = 1;
-  } else if(type == AC_ACTION && event == "トライディザスター") {
+  } else if((type == AC_ACTION || type == AC_REFRESH) && event == "トライディザスター") {
     col = 2;
   } else if((type == AC_EFFECT || type == AC_LOSE_EFFECT) && event == "ラウズ") {
     col = 3;
   } else if(type == AC_ACTION && event == "エンキンドル") {
     col = 4;
-  } else if(type == AC_ACTION && event == "ミアズガ") {
+  } else if((type == AC_ACTION || type == AC_REFRESH) && event == "ミアズガ") {
     col = 5;
-  } else if(type == AC_ACTION && event == "バイオガ") {
+  } else if((type == AC_ACTION || type == AC_REFRESH) && event == "バイオガ") {
     col = 6;
   } else if(who == this.userName && type == AC_ACTION && event == "エーテルフロー") {
     col = 7;
