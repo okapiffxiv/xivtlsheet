@@ -151,12 +151,14 @@ Heal_OutputBuff.prototype.DRK = function (who, type, event, whom) {
     col = 3;
   } else if((type == AC_EFFECT || type == AC_LOSE_EFFECT) && event == "ブラックナイト") {
     col = 4;
-  } else if((type == AC_EFFECT || type == AC_LOSE_EFFECT) && event == "リビングデッド") {
+  } else if((type == AC_EFFECT || type == AC_LOSE_EFFECT) && event == "ダークマインド") {
     col = 5;
-  } else if((type == AC_EFFECT || type == AC_LOSE_EFFECT) && event == "コンバレセンス") {
+  } else if((type == AC_EFFECT || type == AC_LOSE_EFFECT) && event == "リビングデッド") {
     col = 6;
-  } else if((type == AC_EFFECT || type == AC_LOSE_EFFECT) && event == "リプライザル") {
+  } else if((type == AC_EFFECT || type == AC_LOSE_EFFECT) && event == "コンバレセンス") {
     col = 7;
+  } else if((type == AC_EFFECT || type == AC_LOSE_EFFECT) && event == "リプライザル") {
+    col = 8;
   }
   
   if (col != null) col = baseCol + col;

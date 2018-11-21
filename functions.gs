@@ -156,6 +156,7 @@ function booName2Cell(event) {
       event == "ディヴァインベニゾン" || 
       event == "生命活性法" ||
       event == "ディグニティ" ||
+      event == "シナストリー［被］" ||
       event == "フェイユニオン［被］" ||
       event == "深謀遠慮の策" ||
       event == "地神のミンネ" ||

@@ -49,7 +49,7 @@
 //
 //var CNT_HWAR_COL = 10;
 //var CNT_HPLD_COL = 13;
-//var CNT_HDRK_COL = 7;
+//var CNT_HDRK_COL = 8;
 //var CNT_HMNK_COL = 2;
 //var CNT_HDRG_COL = 2;
 //var CNT_HNIN_COL = 2;
