@@ -33,6 +33,7 @@
 //var TMP_PLD  = "temp(PLD)";
 //var TMP_RAIDBUFF = "temp(raidbuff)";
 //var TMP_VIEWLOG = "temp(log)";
+//var TMP_CMP_BRD = "compare(BRD)";
 //
 //// 出力内容
 //var OUTPUT_TIMELINE = "timeline";

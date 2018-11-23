@@ -50,6 +50,11 @@ function Logsから詩人情報をインポート() {
   new Convert2Fflogs(OUTPUT_BRDBUFF, "Bard");
 }
 
+function Logsから詩人情報を比較() {
+  copyTempSheets_(TMP_CMP_BRD);
+  new Convert2Fflogs(OUTPUT_BRDBUFF, "Bard", true);
+}
+
 function Logsからモンク情報をインポート() {
   copyTempSheets_(TMP_MNK);
   new Convert2Fflogs(OUTPUT_MNKBUFF, "Monk");

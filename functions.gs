@@ -327,3 +327,26 @@ function getFriendryName(job, friendries, jobDef) {
   
   return false;
 }
+
+// FFLogsAPIへアクセス
+function getResponse(path) {
+  if (path.match(/\?/)) {
+    path = path + "&api_key=" + LOGS_KEY;
+  } else {
+    path = path + "?api_key=" + LOGS_KEY;
+  }
+  
+  try {
+    var response = UrlFetchApp.fetch(LOGS_HOST　+ path);
+    var responseCode = response.getResponseCode();
+  } catch(e) {
+    var responseCode = -1;
+  }
+  
+  if (responseCode != 200) {
+    Browser.msgBox(ERR_NO_URL);
+    return false;
+  }
+  
+  return response;
+} 

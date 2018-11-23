@@ -182,13 +182,14 @@ clsOutput.prototype.outputallbuff = function(sheet, startRow, vals, jobs) {
         this.outputPadCell(sheet, row, col);
         
       } else {
-        vals["who"] = vals["who"].replace(/\s.*$/, "");
-        vals["whom"]  = vals["whom"].replace(/\s.*$/, "");
+        var who  = vals["who"].replace(/\s.*$/, "");
+        var whom = vals["whom"].replace(/\s.*$/, "");
         var cValue = null;
   
 
         if (booName2Cell(vals["event"])) {
-          cValue = vals["whom"];
+          cValue = whom;
+          if (jobs[vals["whom"]] != undefined) cValue = jobs[vals["whom"]];
         
         } else if (vals["event"] == "アルティメイタム") {
           cValue = 2;

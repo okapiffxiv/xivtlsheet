@@ -18,7 +18,7 @@ var Convert2Fflogs = function(outputType, job) {
   // 出力するタイムライン
   this.tlType = OUTPUT_TIMELINE;
   if (booOutputTlSkill()) this.tlType = OUTPUT_SKILL;
-
+  
   // シート名
   if (this.outputType == OUTPUT_LOG) {
     this.sheetName = SHEET_LOG;
@@ -43,20 +43,16 @@ var Convert2Fflogs = function(outputType, job) {
 Convert2Fflogs.prototype.data2Parse = function(logCode, fId, jobName) {
   // 開始時間、終了時間の抽出
   try {
-    var response = UrlFetchApp.fetch(LOGS_HOST + "report/fights/" + logCode + "?api_key=" + LOGS_KEY);
-    var responseCode = response.getResponseCode();
+    var response = getResponse("report/fights/" + logCode);
   } catch(e) {
-    var responseCode = -1;
-  }  
-  
-  if (responseCode != 200) {
-    Browser.msgBox(ERR_NO_URL);
     return false;
   }
   
-  
   var jsonFights = JSON.parse(response.getContentText());
-  var fight = jsonFights["fights"][fId - 1];
+  var fights = jsonFights["fights"];
+  if (fId == "last") fId = fights[fights.length - 1]["id"];
+  var fight = fights[fId - 1];
+
   this.startTime = fight["start_time"];
   this.endTime   = fight["end_time"];
   
@@ -86,21 +82,18 @@ Convert2Fflogs.prototype.data2Parse = function(logCode, fId, jobName) {
   var oValues = [];
   var oBuffs  = [];
 
-  // シートをクリア
-  if(booOutputToTL(this.outputType)) {
-    deleteRows(this.sheetName, this.startRow);
-  } else {
-    clearBuffs(this.sheetName, this.startRow);
-  }
-  
   // 開始時間のセット
   oValues.push(getTlValue({"time": this.getTime(startTime), "type": AC_CONBATSTART}));
-
 
   // logを抽出
   var logs = [];
   while(startTime != undefined) {
-    var response = UrlFetchApp.fetch(LOGS_HOST + "report/events/" + logCode + "?start=" + startTime + "&end=" + endTime + "&translate=true&api_key=" + LOGS_KEY);
+    try {
+      var response = getResponse("report/events/" + logCode + "?start=" + startTime + "&end=" + endTime + "&translate=true");
+    } catch(e) {
+      return false;
+    }
+    
     var jsonEvents = JSON.parse(response.getContentText());
     var events = jsonEvents["events"];
     startTime = jsonEvents["nextPageTimestamp"];
@@ -108,23 +101,17 @@ Convert2Fflogs.prototype.data2Parse = function(logCode, fId, jobName) {
     if (jsonEvents["type"] == "death" && jsonEvents["targetIsFriendly"] == false) break;
     for (var idx in events) {
       var event = events[idx];
+      if (event["ability"] == undefined) continue;
       
-      if (event["type"] == "death" && event["targetIsFriendly"] == false) break;
-      if (event["type"] == "death") continue;
-      
+      var ability = event["ability"]["name"];
+
       // AAは無視
-      if (booAA(event["ability"]["name"])) continue;
+      if (booAA(ability)) continue;
       
       // dot,hotは無視
       if (event["tick"]) continue;
       
-      var ability = event["ability"]["name"];
       if (ability == "" || booSkipDebuff(ability)) continue;
-      
-      if (event["ability"]["name"] == "ヘリオス") {
-        Logger.log(event);
-      }
-
       
       var who  = "";
       var sourceId = event["sourceID"];
@@ -209,6 +196,7 @@ Convert2Fflogs.prototype.outputOBuff = function(sheet, datas, jobs) {
 }
 
 
+// {userId: {"name": val, "type": val}}形式
 Convert2Fflogs.prototype.getPartyData = function(key, json, fId) {
   var values = json[key];
   var ids = {};
@@ -229,6 +217,8 @@ Convert2Fflogs.prototype.getPartyData = function(key, json, fId) {
   return ids;
 }
 
+
+// {userName: "type"}形式
 Convert2Fflogs.prototype.getPartyJob = function(key, json, fId) {
   var values = json[key];
   var ids = {};
@@ -249,6 +239,8 @@ Convert2Fflogs.prototype.getPartyJob = function(key, json, fId) {
   return ids;
 }
 
+
+// abilityTypeを出力
 Convert2Fflogs.prototype.getType = function(event) {
   var type = event["type"];
   
@@ -271,6 +263,7 @@ Convert2Fflogs.prototype.getType = function(event) {
   }
 }
 
+// 討伐時間
 Convert2Fflogs.prototype.getTime = function(time) {
   var sec = Math.floor((time - this.startTime) / 1000);
   return sec2Time(sec);

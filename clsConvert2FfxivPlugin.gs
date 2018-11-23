@@ -51,14 +51,6 @@ Convert2FfxivPlugin.prototype.data2Parse = function() {
   var oBuffs  = [];
   
   
-
-  // シートをクリア
-  if(booOutputToTL(this.outputType)) {
-    deleteRows(this.sheetName, this.startRow);
-  } else {
-    clearBuffs(this.sheetName, this.startRow);
-  }
-  
   // Logのデータを１行ずつループ
   var logs = [];
   var jobs = [];
