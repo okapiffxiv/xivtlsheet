@@ -284,6 +284,19 @@ function copyTempSheets_ (sheetName, toName) {
 }
 
 
+// バージョンチェック
+function booUpdate() {
+  // ID からスプレッドシートを取得 COL_LASTEST_VERSION
+  var book    = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet　　　　 = book.getSheetByName(SHEET_SETTING);
+  var lastest =  sheet.getRange(COL_LASTEST_VERSION).getValue();
+
+  Browser.msgBox(VERSION + " != " + lastest, Browser.Buttons.OK)
+  if (VERSION != lastest) return true;
+  return false;
+}
+
+
 // Logsパラメータ設定ダイアログ
 function dialogFflogs() {
   var message = "https://www.fflogs.com/reports/【???????/#fight=数字】\nの【】の部分を入力";

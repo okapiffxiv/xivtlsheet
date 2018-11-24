@@ -4,9 +4,9 @@
 
 var Menu = function () {
   var ui = SpreadsheetApp.getUi();
-  var menu = ui.createMenu('タイムライン');
+  var menuTitle = "タイムライン";
+  var menu = ui.createMenu(menuTitle);
   var booTlSkill = "✓";
-  a = booOutputTlSkill();
   if(!booOutputTlSkill()) booTlSkill = "";
   
   menu.addSubMenu(
@@ -39,6 +39,7 @@ var Menu = function () {
   menu.addItem("ユーザ設定（"+ getUserName() +"）", "ユーザ名設定");
   menu.addItem("ViewLogを出力", "ViewLogをインポート")
   menu.addItem("logsシートをリセット", "Logsシートをリセット")
+  menu.addItem("最新のシート情報（ver."+ VERSION +"）", "githubへ移動")
 
   menu.addToUi(); 
 

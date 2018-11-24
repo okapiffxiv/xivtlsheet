@@ -135,3 +135,7 @@ function ViewLogをインポート() {
 function Logsシートをリセット() {
   new CreateLogsSheet();
 }
+
+function githubへ移動() {
+  Browser.msgBox(ERR_LINK_GITHUB, Browser.Buttons.OK);
+}

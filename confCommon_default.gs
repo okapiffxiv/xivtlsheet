@@ -1,6 +1,7 @@
 //////////////////////////////////////////
 //// 共通定義
 //////////////////////////////////////////
+//var VERSION = "1.0.0";
 //var objSheet;
 //var timezone = 'JST';
 //var COL_OUTPUT_SKILL = "C2";
@@ -17,7 +18,9 @@
 //var SHEET_TIMELINE = "timeline";
 //var SHEET_LOG      = "viewlog";
 //var SHEET_SETTING  = "設定";
+//var SHEET_VERSION  = "バージョン";
 //
+//var VERSION_SHEET_ID = "";
 //var TMP_SHEET_ID = "";
 //var LOGS_KEY = ""
 //var LOGS_HOST = "https://ja.fflogs.com:443/v1/";
@@ -92,6 +95,7 @@
 //var ERR_NO_TEMP = "テンプレートシートがありません";
 //var ERR_NO_LOGS = "logsシートがありません";
 //var ERR_NO_SETTING = "未設定";
+//var ERR_LINK_GITHUB = "タイムラインシートのバージョン管理はgithubで行っています。\\n最新バージョンの確認、スプレットシートの入手は以下のURLへアクセスしてください\\n\\nhttps://github.com/okapiffxiv/xivtlsheet";
 //
 //// BRD定義
 //var BRD_Menuett　= "メヌエット";
