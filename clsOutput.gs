@@ -10,31 +10,6 @@ var clsOutput = function(outputType, startRow, tlType, userName) {
 }
 
 
-// ログをパース
-clsOutput.prototype.parseCSV = function(data) {
-  var vals = {};
-  vals["who"] = data.replace(/^(.*)\s[0-9]*\s(begins casting|casts).*$/g, "$1");
-  vals["sync"] = "";
-  
-  if (data.match(/begins casting/)) {
-    vals["type"] = AC_START_USING;
-    vals["event"] = data.replace(/^.*casting  /g, "");
-  
-  } else if(data.match(/casts/)){
-    vals["type"] = AC_ACTION;
-    vals["event"] = data.replace(/^.*casts  /g, "");
-    
-  } else {
-    vals["event"] = "Unknown";
-  }
-
-  vals["whom"]  = vals["event"].replace(/.* on\s(.*)\s.*$/g, "$1");
-  vals["event"] = vals["event"].replace(/ on .*$/g, "");
-  
-  return vals;
-}
-
-
 // シートにタイムラインを出力
 clsOutput.prototype.outputTimeline = function(sheet, vals) {
   var oVals  = [];
@@ -175,9 +150,11 @@ clsOutput.prototype.outputallbuff = function(sheet, startRow, vals, jobs) {
       
       // エクセルに出力
       if(vals["type"] == AC_LOSE_EFFECT || vals["event"] == "ステラデトネーション"　|| vals["event"] == "ステラバースト") {
+        // バフが消失
         this.outputLoseEffect(sheet, row, col);
         
       } else if(vals["type"] == AC_REFRESH) {
+        // バフを上書き
         sheet.getRange(row, col).setValue(1);
         this.outputPadCell(sheet, row, col);
         
@@ -188,20 +165,25 @@ clsOutput.prototype.outputallbuff = function(sheet, startRow, vals, jobs) {
   
 
         if (booName2Cell(vals["event"])) {
+          // targetを出力
           cValue = whom;
           if (jobs[vals["whom"]] != undefined) cValue = jobs[vals["whom"]];
+          
+        } else if (this.outputType == OUTPUT_RAIDBUFF && LB_OutputBuffCol(vals["event"]) > 0) {
+          // LB系
+          cValue = vals["event"];
         
-        } else if (vals["event"] == "アルティメイタム") {
-          cValue = 2;
-
         } else if (this.outputType == OUTPUT_BRDBUFF && BRD_SongValue(vals["event"]) != null) {
+          // 詩人歌
           cValue = BRD_SongValue(vals["event"]);
           this.outputPadCell(sheet, row, col);
           
         } else if (vals["event"].match(/^トルバドゥール/)) {
+          // トルバ系
           cValue = BRD_SongValue(vals["event"]);
           
         }  else if (this.outputType == OUTPUT_SMNBUFF && SMN_FlowValue(vals["event"]) != null) {
+          // 召喚、フロー消化
           cValue = SMN_FlowValue(vals["event"]);
           
         } else {
@@ -265,6 +247,7 @@ clsOutput.prototype.outputPadCell = function(sheet, lastRow, col) {
   sheet.getRange(lastRow - cntRows, col, cntRows, 1).setValue(value);
 }
 
+
 // 出力するバフの横軸の値を返す
 clsOutput.prototype.outputBuffCol = function(val, jobs) {
   var col     = null;
@@ -278,6 +261,12 @@ clsOutput.prototype.outputBuffCol = function(val, jobs) {
   if (this.outputType != OUTPUT_ALLBUFF) {
     var raidCol = RAIDBUFF_OutputBuffCol(who, whom, type, event, this.userName);
     if(raidCol != null) col = raidCol;
+    
+    // LB
+    if (this.outputType == OUTPUT_RAIDBUFF) {
+      var lbCol = LB_OutputBuffCol(event);
+      if(lbCol > 0) col = 16;
+    }
     
     // ジョブ別
     var objJobBuff = new Job_OutputBuff(this.outputType, who, whom, type, event, this.userName);
