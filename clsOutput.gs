@@ -169,7 +169,7 @@ clsOutput.prototype.outputallbuff = function(sheet, startRow, vals, jobs) {
           cValue = whom;
           if (jobs[vals["whom"]] != undefined) cValue = jobs[vals["whom"]];
           
-        } else if (this.outputType == OUTPUT_RAIDBUFF && LB_OutputBuffCol(vals["event"]) > 0) {
+        } else if (this.outputType == OUTPUT_RAIDBUFF && LB_OutputBuffCol(vals["event"], vals["type"]) > 0) {
           // LB系
           cValue = vals["event"];
         
@@ -264,7 +264,7 @@ clsOutput.prototype.outputBuffCol = function(val, jobs) {
     
     // LB
     if (this.outputType == OUTPUT_RAIDBUFF) {
-      var lbCol = LB_OutputBuffCol(event);
+      var lbCol = LB_OutputBuffCol(event, type);
       if(lbCol > 0) col = 16;
     }
     
