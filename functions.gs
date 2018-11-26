@@ -313,8 +313,8 @@ function dialogJob(friendries) {
   var job = "";
   
   for (var i in friendries) {
+    if (friendries[i]["type"] == "LimitBreak") continue;
     var type = friendries[i]["type"];
-    if (type == "LimitBreak") continue;
     
     job += type + "\\n";
   }
