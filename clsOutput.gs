@@ -118,8 +118,12 @@ clsOutput.prototype.outputallbuff = function(sheet, startRow, vals, jobs) {
   if (col == null) return startRow;
   
   for(var i = startRow; i <= lastRow; i++){
-    var bTime = time2Sec(formatDate(sheet.getRange(i, 1).getValue()));
-    var aTime = time2Sec(formatDate(sheet.getRange(i + 1, 1).getValue()));
+    aVal = formatDate(sheet.getRange(i, 1).getValue())
+    bVal = formatDate(sheet.getRange(i + 1, 1).getValue())
+    if (aVal == false || bVal == false) break;
+
+    var bTime = time2Sec(aVal);
+    var aTime = time2Sec(bVal);
     
     // 現在の列と次の列の間にtimeが存在すれば出力
     if (bTime <= secTime && aTime >= secTime) {

@@ -121,7 +121,11 @@ function sec2Time(time) {
 
 // Date型をフォーマット
 function formatDate(time) {
+  if(time instanceof Date) {
     return Utilities.formatDate(time, timezone, 'HH:mm:ss.SSS');
+  } else {
+    return false;
+  }
 }
 
 
