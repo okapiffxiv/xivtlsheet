@@ -6,7 +6,7 @@ ACTのlog、FFLogsからFF14零式コンテンツ用のタイムラインのス�
 - Googleアカウントにログイン
 - [ここをクリックして](https://docs.google.com/spreadsheets/d/1L8iDIn373U3rOGpw5KPLYQ3oE-U-BjJWxSTcbE4xbJE/copy)自分のGoogleアカウントのドライブにスプレットシートをコピー
 - メニューから「タイムライン＞ユーザ名設定」を選択
-- 承認ダイアログが出てきた許可する（[参考記事](https://www.virment.com/step-allow-google-apps-script/)）
+- 承認ダイアログが出てきたら許可をクリック（[参考記事](https://www.virment.com/step-allow-google-apps-script/)）
 
 ### アップデートの方法
 今まで使っていたGoogleスプレッドシートを削除、または閲覧用とし、もう一度スプレットシートをコピーしてください　　
