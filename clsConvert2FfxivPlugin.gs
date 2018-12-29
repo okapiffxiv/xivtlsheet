@@ -263,15 +263,14 @@ Convert2FfxivPlugin.prototype.parseLine = function(data) {
 
 // ジョブの判別
 Convert2FfxivPlugin.prototype.setJob = function(who, event) {
-  // すでに設定済みか
   if (event == "ファストブレード") {
     return "Paladin";
   } else if (event == "ヘヴィスウィング") {
     return "Warrior";
   } else if (event == "ハードスラッシュ") {
-    return "Darkknight";
+    return "DarkKnight";
   } else if (event == "リジェネ") {
-    return "Whitemage";
+    return "WhiteMage";
   } else if (event == "鼓舞激励の策") {
     return "Scholar";
   } else if (event == "アスペクト・ベネフィク") {
@@ -289,11 +288,11 @@ Convert2FfxivPlugin.prototype.setJob = function(who, event) {
   } else if (event == "スプリットショット") {
     return "Machinist";
   } else if (event == "エノキアン") {
-    return "Blackmage";
+    return "BlackMage";
   } else if (event == "ミアズマバースト") {
     return "Summoner";
   } else if (event == "マナフィケーション") {
-    return "Redmage";
+    return "RedMage";
   }
   
   return null;

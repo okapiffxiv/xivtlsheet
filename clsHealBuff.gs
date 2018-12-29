@@ -15,7 +15,7 @@ Heal_OutputBuff = function(outputType, who, whom, type, event, userName, jobs) {
 
 Heal_OutputBuff.prototype.getCol = function() {
   var col = null;
-  
+
   if(this.outputType == OUTPUT_ALLBUFF) {
     if (this.jobs[this.who] == "Warrior") {
       var col = this.WAR(this.who, this.type, this.event, this.whom);
@@ -23,7 +23,7 @@ Heal_OutputBuff.prototype.getCol = function() {
     } else if(this.jobs[this.who] == "Paladin") {
       var col = this.PLD(this.who, this.type, this.event, this.whom);
       
-    } else if(this.jobs[this.who] == "Darkknight") {
+    } else if(this.jobs[this.who] == "DarkKnight") {
       var col = this.DRK(this.who, this.type, this.event, this.whom);
 
     } else if(this.jobs[this.who] == "Monk") {
@@ -41,16 +41,16 @@ Heal_OutputBuff.prototype.getCol = function() {
     } else if(this.jobs[this.who] == "Bard") {
       var col = this.BRD(this.who, this.type, this.event, this.whom);
       
-    } else if(this.jobs[this.who] == "Blackmage") {
+    } else if(this.jobs[this.who] == "BlackMage") {
       var col = this.BLM(this.who, this.type, this.event, this.whom);
 
     } else if(this.jobs[this.who] == "Summoner" || this.who.match(/Garuda|Ifrit|Titan|ガルーダ|イフリート|タイタン/)) {
       var col = this.SMN(this.who, this.type, this.event, this.whom);
 
-    } else if(this.jobs[this.who] == "Redmage") {
+    } else if(this.jobs[this.who] == "RedMage") {
       var col = this.RDM(this.who, this.type, this.event, this.whom);
       
-    } else if(this.jobs[this.who] == "Whitemage") {
+    } else if(this.jobs[this.who] == "WhiteMage") {
       var col = this.WHM(this.who, this.type, this.event, this.whom);
 
     } else if(this.jobs[this.who] == "Astrologian") {
@@ -75,6 +75,8 @@ Heal_OutputBuff.prototype.WAR = function (who, type, event, whom) {
 
   if (this.Provoke(type, event)) {
     col = 1;
+//  } else if(type == AC_AOE && event == "シェイクオフ") {
+//    col = 2;
   } else if(whom == this.userName && (type == AC_EFFECT || type == AC_LOSE_EFFECT) && event == "シェイクオフ") {
     col = 2;
   } else if((type == AC_EFFECT || type == AC_LOSE_EFFECT) && event == "ヴェンジェンス") {
