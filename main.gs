@@ -50,9 +50,9 @@ function Logsから詩人情報をインポート() {
   new Convert2Fflogs(OUTPUT_BRDBUFF, "Bard");
 }
 
-function Logsから詩人情報を比較() {
-  copyTempSheets_(TMP_CMP_BRD);
-  new Convert2Fflogs(OUTPUT_BRDBUFF, "Bard", true);
+function Logsから機工士情報をインポート() {
+  copyTempSheets_(TMP_MCH);
+  new Convert2Fflogs(OUTPUT_MCHBUFF, "Machinist");
 }
 
 function Logsからモンク情報をインポート() {
@@ -100,6 +100,11 @@ function バフをインポート() {
 function 詩人情報をインポート() {
   copyTempSheets_(TMP_BRD);
   new Convert2FfxivPlugin(OUTPUT_BRDBUFF);
+}
+
+function 機工士情報をインポート() {
+  copyTempSheets_(TMP_BRD);
+  new Convert2FfxivPlugin(OUTPUT_MCHBUFF);
 }
 
 function モンク情報をインポート() {

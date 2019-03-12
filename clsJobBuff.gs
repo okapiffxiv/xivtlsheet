@@ -18,6 +18,9 @@ Job_OutputBuff.prototype.getCol = function() {
   if (this.outputType == OUTPUT_BRDBUFF) {
     return this.BRD(this.type, this.event);
     
+  } else if(this.outputType == OUTPUT_MCHBUFF) {
+    return this.MCH(this.type, this.event);
+    
   } else if(this.outputType == OUTPUT_MNKBUFF) {
     return this.MNK(this.who, this.type, this.event);
     
@@ -68,25 +71,31 @@ Job_OutputBuff.prototype.BRD = function(type, event) {
   return col;
 }
 
-//// 機工士
-//Job_OutputBuff.prototype.MCH = function(type, event) {
-//  var col = null;
-//  
-//  if(type == AC_ACTION && event == "オーバードライブ・ルーク") {
-//    col = 1;
-//  } else if((type == AC_ACTION || type == AC_LOSE_EFFECT) && event == "猛者の撃") {
-//    col = 2;
-//  } else if(type == AC_ACTION && event == "アイアンジョー") {
-//    col = 3;
-//  } else if(type == AC_ACTION && event == "サイドワインダー") {
-//    col = 4;
-//  } else if((type == AC_LOSE_EFFECT || type == AC_EFFECT) && event == "タクティシャン") {
-//    col = 5;
-//  }
-//  
-//  if (col != null) col = this.baseCol + col;
-//  return col;
-//}
+// 機工士
+Job_OutputBuff.prototype.MCH = function(type, event) {
+  var col = null;
+
+  if(type == AC_ACTION && event == "ガウスバレル") {
+    col = 1;
+  } else if(type == AC_ACTION && event == "バレルヒーター") {
+    col = 2;
+  } else if((type == AC_ACTION || type == AC_LOSE_EFFECT) && event == "フレイムスロアー") {
+    col = 3;
+  } else if(type == AC_ACTION && (event == "オーバードライブ・ルーク" || event == "オーバードライブ・ビショップ")) {
+    col = 4;
+  } else if(type == AC_ACTION && event == "ガウスラウンド") {
+    col = 5;
+  } else if(type == AC_ACTION && event == "クールダウン") {
+    col = 6;
+  } else if(type == AC_ACTION && event == "リコシェット") {
+    col = 7;
+  } else if((type == AC_LOSE_EFFECT || type == AC_EFFECT) && event == "タクティシャン") {
+    col = 8;
+  }
+  
+  if (col != null) col = this.baseCol + col;
+  return col;
+}
 
 // モンク
 Job_OutputBuff.prototype.MNK = function(who, type, event) {
