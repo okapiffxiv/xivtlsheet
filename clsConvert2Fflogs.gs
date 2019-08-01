@@ -118,22 +118,28 @@ Convert2Fflogs.prototype.data2Parse = function(logCode, fId, jobName) {
       if (event["sourceIsFriendly"]) {
         if (this.friendlies[sourceId]) who = this.friendlies[sourceId]["name"];
         if (who == "" && this.friendlyPets[sourceId]) who = this.friendlyPets[sourceId]["name"];
-      } else {
-        if (this.enemies[sourceId]) who = this.enemies[sourceId]["name"];
-      }
 
+      } else if (this.enemies[sourceId]) {
+        who = this.enemies[sourceId]["name"];
+
+      } else {
+        // whoが空のエンボルは無視
+        if (event["targetIsFriendly"] && ability == "エンボルデン") continue;
+        
+      }
+      
       var whom = "";
       var targetId = event["targetID"];
       if (event["targetIsFriendly"]) {
         if (this.friendlies[targetId]) whom = this.friendlies[targetId]["name"];
         if (whom == "" && this.friendlyPets[targetId]) whom = this.friendlyPets[targetId]["name"];
-      } else {
-        if (this.enemies[targetId]) whom = this.enemies[targetId]["name"];
+
+      } else if (this.enemies[targetId]) {
+        whom = this.enemies[targetId]["name"];
       }
       
       var type = this.getType(event);
       if (type == null) continue;
-      
       
       var val = getTlValue({
         "time" : this.getTime(event["timestamp"]), 
@@ -154,7 +160,7 @@ Convert2Fflogs.prototype.data2Parse = function(logCode, fId, jobName) {
   // フィルタリング
   for (var idx in logs) {
     var log = logs[idx];
-    
+
     if (this.tlType == OUTPUT_TIMELINE && !log["booFriendly"]) {
       if (log["type"] == AC_LOSE_EFFECT) continue;
       if (!this.clsOutput.booContinue(oValues, log)) oValues.push(log);

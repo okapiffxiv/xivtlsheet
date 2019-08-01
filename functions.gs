@@ -47,7 +47,7 @@ function booOutputTypeJob(outputType) {
 // Petかどうか
 function booPet(who) {
   if (typeof who != "string" || who == null || who == "") return false;
-  return who.match(/(カーバンクル|タレット|エギ|フェアリー|デミ・バハムート)/);
+  return who.match(/(カーバンクル|タレット|エギ|フェアリー|デミ・バハムート|デミ・フェニックス)/);
 }
 
 // 敵かどうか
