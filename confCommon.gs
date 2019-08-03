@@ -1,7 +1,7 @@
 ////////////////////////////////////////
 // 共通定義
 ////////////////////////////////////////
-var VERSION = "2.0.4";
+var VERSION = "2.２.0";
 var objSheet;
 var timezone = 'JST';
 var COL_OUTPUT_SKILL = "C2";
@@ -93,7 +93,8 @@ var CNT_HMNK_COL = 2;
 var CNT_HDRG_COL = 2;
 var CNT_HNIN_COL = 2;
 var CNT_HSAM_COL = 2;
-var CNT_HBRD_COL = 4;
+var CNT_HBRD_COL = 3;
+var CNT_HMCH_COL = 2;
 var CNT_HDNC_COL = 4;
 var CNT_HBLM_COL = 1;
 var CNT_HSMN_COL = 1;

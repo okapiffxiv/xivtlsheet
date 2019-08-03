@@ -52,20 +52,23 @@
 //var OUTPUT_PLDBUFF  = "pld";
 //var OUTPUT_LOG      = "log";
 //
-//var CNT_HWAR_COL = 10;
+//var CNT_HWAR_COL = 11;
 //var CNT_HPLD_COL = 13;
-//var CNT_HDRK_COL = 8;
+//var CNT_HDRK_COL = 9;
+//var CNT_HGNB_COL = 10;
 //var CNT_HMNK_COL = 2;
 //var CNT_HDRG_COL = 2;
 //var CNT_HNIN_COL = 2;
 //var CNT_HSAM_COL = 2;
-//var CNT_HBRD_COL = 4;
-//var CNT_HBLM_COL = 2;
-//var CNT_HSMN_COL = 2;
-//var CNT_HRDM_COL = 2;
-//var CNT_HWHM_COL = 9;
-//var CNT_HAST_COL = 10;
-//var CNT_HSCH_COL = 14;
+//var CNT_HBRD_COL = 3;
+//var CNT_HMCH_COL = 2;
+//var CNT_HDNC_COL = 4;
+//var CNT_HBLM_COL = 1;
+//var CNT_HSMN_COL = 1;
+//var CNT_HRDM_COL = 1;
+//var CNT_HWHM_COL = 13;
+//var CNT_HAST_COL = 12;
+//var CNT_HSCH_COL = 18;
 //
 //// アクションTYPE
 //var AC_CONBATSTART = 0;

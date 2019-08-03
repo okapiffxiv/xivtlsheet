@@ -277,12 +277,26 @@ Heal_OutputBuff.prototype.BRD = function (who, type, event, whom) {
 
   if(whom == this.userName && (type == AC_EFFECT || type == AC_LOSE_EFFECT) && event == "トルバドゥール") {
     col = 1;
-  } else if((type == AC_EFFECT || type == AC_LOSE_EFFECT) && event == "パリセード") {
-    col = 2;
   } else if((type == AC_EFFECT || type == AC_LOSE_EFFECT) && event == "地神のミンネ") {
-    col = 3;
+    col = 2;
   } else if(type == AC_ACTION && event == "内丹") {
-    col = 4;
+    col = 3;
+  }
+
+  if (col != null) col = baseCol + col;
+  return col;
+}
+
+
+// 機工士
+Heal_OutputBuff.prototype.MCH = function (who, type, event, whom) {
+  var col = null;
+  var baseCol = this.baseCol + CNT_HWAR_COL + CNT_HPLD_COL + CNT_HDRK_COL + CNT_HMNK_COL + CNT_HDRG_COL + CNT_HNIN_COL + CNT_HSAM_COL + CNT_HGNB_COL + CNT_HBRD_COL;
+
+  if(whom == this.userName && (type == AC_EFFECT || type == AC_LOSE_EFFECT) && event == "タクティシャン") {
+    col = 1;
+  } else if(type == AC_ACTION && event == "内丹") {
+    col = 2;
   }
 
   if (col != null) col = baseCol + col;
@@ -293,9 +307,9 @@ Heal_OutputBuff.prototype.BRD = function (who, type, event, whom) {
 // 踊り子
 Heal_OutputBuff.prototype.DNC = function (who, type, event, whom) {
   var col = null;
-  var baseCol = this.baseCol + CNT_HWAR_COL + CNT_HPLD_COL + CNT_HDRK_COL + CNT_HMNK_COL + CNT_HDRG_COL + CNT_HNIN_COL + CNT_HSAM_COL + CNT_HGNB_COL + CNT_HDNC_COL;
+  var baseCol = this.baseCol + CNT_HWAR_COL + CNT_HPLD_COL + CNT_HDRK_COL + CNT_HMNK_COL + CNT_HDRG_COL + CNT_HNIN_COL + CNT_HSAM_COL + CNT_HGNB_COL + CNT_HBRD_COL + CNT_HMCH_COL;
 
-  if(whom == this.userName && (type == AC_EFFECT || type == AC_LOSE_EFFECT) && event == "癒やしのワルツ") {
+  if(type == AC_AOE && event == "癒やしのワルツ") {
     col = 1;
   } else if(whom == this.userName && (type == AC_EFFECT || type == AC_LOSE_EFFECT) && event == "守りのサンバ") {
     col = 2;
@@ -313,7 +327,7 @@ Heal_OutputBuff.prototype.DNC = function (who, type, event, whom) {
 // 黒
 Heal_OutputBuff.prototype.BLM = function (who, type, event, whom) {
   var col = null;
-  var baseCol = this.baseCol + CNT_HWAR_COL + CNT_HPLD_COL + CNT_HDRK_COL + CNT_HMNK_COL + CNT_HDRG_COL + CNT_HNIN_COL + CNT_HSAM_COL + CNT_HBRD_COL + CNT_HGNB_COL + CNT_HDNC_COL;
+  var baseCol = this.baseCol + CNT_HWAR_COL + CNT_HPLD_COL + CNT_HDRK_COL + CNT_HMNK_COL + CNT_HDRG_COL + CNT_HNIN_COL + CNT_HSAM_COL + CNT_HBRD_COL + CNT_HMCH_COL + CNT_HGNB_COL + CNT_HDNC_COL;
 
   if((type == AC_EFFECT || type == AC_LOSE_EFFECT) && event == "アドル") {
     col = 1;
@@ -326,7 +340,7 @@ Heal_OutputBuff.prototype.BLM = function (who, type, event, whom) {
 // 召喚
 Heal_OutputBuff.prototype.SMN = function (who, type, event, whom) {
   var col = null;
-  var baseCol = this.baseCol + CNT_HWAR_COL + CNT_HPLD_COL + CNT_HDRK_COL + CNT_HMNK_COL + CNT_HDRG_COL + CNT_HNIN_COL + CNT_HSAM_COL + CNT_HBRD_COL + CNT_HBLM_COL + CNT_HGNB_COL + CNT_HDNC_COL;
+  var baseCol = this.baseCol + CNT_HWAR_COL + CNT_HPLD_COL + CNT_HDRK_COL + CNT_HMNK_COL + CNT_HDRG_COL + CNT_HNIN_COL + CNT_HSAM_COL + CNT_HBRD_COL + CNT_HMCH_COL + CNT_HBLM_COL + CNT_HGNB_COL + CNT_HDNC_COL;
 
   if((type == AC_EFFECT || type == AC_LOSE_EFFECT) && event == "アドル") {
     col = 1;
@@ -339,7 +353,7 @@ Heal_OutputBuff.prototype.SMN = function (who, type, event, whom) {
 // 赤
 Heal_OutputBuff.prototype.RDM = function (who, type, event, whom) {
   var col = null;
-  var baseCol = this.baseCol + CNT_HWAR_COL + CNT_HPLD_COL + CNT_HDRK_COL + CNT_HMNK_COL + CNT_HDRG_COL + CNT_HNIN_COL + CNT_HSAM_COL + CNT_HBRD_COL + CNT_HBLM_COL + CNT_HSMN_COL + CNT_HGNB_COL + CNT_HDNC_COL;
+  var baseCol = this.baseCol + CNT_HWAR_COL + CNT_HPLD_COL + CNT_HDRK_COL + CNT_HMNK_COL + CNT_HDRG_COL + CNT_HNIN_COL + CNT_HSAM_COL + CNT_HBRD_COL + CNT_HMCH_COL + CNT_HBLM_COL + CNT_HSMN_COL + CNT_HGNB_COL + CNT_HDNC_COL;
 
   if((type == AC_EFFECT || type == AC_LOSE_EFFECT) && event == "アドル") {
     col = 1;
@@ -369,7 +383,7 @@ Heal_OutputBuff.prototype.Rampart = function(type, event) {
 
 Heal_OutputBuff.prototype.WHM = function (who, type, event, whom) {
   var col = null;
-  var baseCol = this.baseCol + CNT_HWAR_COL + CNT_HPLD_COL + CNT_HDRK_COL + CNT_HMNK_COL + CNT_HDRG_COL + CNT_HNIN_COL + CNT_HSAM_COL + CNT_HBRD_COL + CNT_HBLM_COL + CNT_HSMN_COL + CNT_HRDM_COL + CNT_HGNB_COL + CNT_HDNC_COL;
+  var baseCol = this.baseCol + CNT_HWAR_COL + CNT_HPLD_COL + CNT_HDRK_COL + CNT_HMNK_COL + CNT_HDRG_COL + CNT_HNIN_COL + CNT_HSAM_COL + CNT_HBRD_COL + CNT_HMCH_COL + CNT_HBLM_COL + CNT_HSMN_COL + CNT_HRDM_COL + CNT_HGNB_COL + CNT_HDNC_COL;
 
   if (whom == this.userName && (type == AC_REFRESH ||type == AC_EFFECT || type == AC_LOSE_EFFECT) && event == "メディカラ") {
     col = 1;
@@ -393,7 +407,7 @@ Heal_OutputBuff.prototype.WHM = function (who, type, event, whom) {
     col = 10;
   } else if(whom == this.userName && (type == AC_REFRESH ||type == AC_EFFECT || type == AC_LOSE_EFFECT) && event == "インドゥルゲンティア") {
     col = 11;
-  } else if(whom == this.userName && (type == AC_EFFECT || type == AC_AOE) && event == "ディヴァインベニゾン") {
+  } else if((type == AC_EFFECT || type == AC_LOSE_EFFECT)　&& event == "ディヴァインベニゾン") {
     col = 12;
   } else if(whom == this.userName && (type == AC_EFFECT || type == AC_AOE) && event == "テンパランス：効果") {
     col = 13;
@@ -406,7 +420,7 @@ Heal_OutputBuff.prototype.WHM = function (who, type, event, whom) {
 
 Heal_OutputBuff.prototype.AST = function (who, type, event, whom) {
   var col = null;
-  var baseCol = this.baseCol + CNT_HWAR_COL + CNT_HPLD_COL + CNT_HDRK_COL + CNT_HMNK_COL + CNT_HDRG_COL + CNT_HNIN_COL + CNT_HSAM_COL + CNT_HBRD_COL + CNT_HBLM_COL + CNT_HSMN_COL + CNT_HRDM_COL + CNT_HWHM_COL + CNT_HGNB_COL + CNT_HDNC_COL;
+  var baseCol = this.baseCol + CNT_HWAR_COL + CNT_HPLD_COL + CNT_HDRK_COL + CNT_HMNK_COL + CNT_HDRG_COL + CNT_HNIN_COL + CNT_HSAM_COL + CNT_HBRD_COL + CNT_HMCH_COL + CNT_HBLM_COL + CNT_HSMN_COL + CNT_HRDM_COL + CNT_HWHM_COL + CNT_HGNB_COL + CNT_HDNC_COL;
   
   if(type == AC_ACTION && event == "ベネフィラ") {
     col = 1;
@@ -441,7 +455,7 @@ Heal_OutputBuff.prototype.AST = function (who, type, event, whom) {
 
 Heal_OutputBuff.prototype.SCH = function (who, type, event, whom) {
   var col = null;
-  var baseCol = this.baseCol + CNT_HWAR_COL + CNT_HPLD_COL + CNT_HDRK_COL + CNT_HMNK_COL + CNT_HDRG_COL + CNT_HNIN_COL + CNT_HSAM_COL + CNT_HBRD_COL + CNT_HBLM_COL + CNT_HSMN_COL + CNT_HRDM_COL + CNT_HWHM_COL + CNT_HAST_COL + CNT_HGNB_COL + CNT_HDNC_COL;
+  var baseCol = this.baseCol + CNT_HWAR_COL + CNT_HPLD_COL + CNT_HDRK_COL + CNT_HMNK_COL + CNT_HDRG_COL + CNT_HNIN_COL + CNT_HSAM_COL + CNT_HBRD_COL + CNT_HMCH_COL + CNT_HBLM_COL + CNT_HSMN_COL + CNT_HRDM_COL + CNT_HWHM_COL + CNT_HAST_COL + CNT_HGNB_COL + CNT_HDNC_COL;
 
   if((type == AC_ACTION || type == AC_AOE || type == AC_LOSE_EFFECT) && event == "野戦治療の陣") {
     col = 1;
@@ -475,7 +489,7 @@ Heal_OutputBuff.prototype.SCH = function (who, type, event, whom) {
     col = 15;
   } else if (whom == this.userName && (type == AC_EFFECT || type == AC_LOSE_EFFECT) && event == "セラフィックイルミネーション") {
     col = 16;
-  } else if (whom == this.userName && (type == AC_EFFECT || type == AC_LOSE_EFFECT) && event == "コンソレイション") {
+  } else if (whom == this.userName && type == AC_AOE && event == "コンソレイション") {
     col = 17;
   } else if (type == AC_ACTION && event == "転化") {
     col = 18;
