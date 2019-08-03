@@ -44,6 +44,7 @@
 //var OUTPUT_ALLBUFF  = "allbuff";
 //var OUTPUT_RAIDBUFF = "raidbuff";
 //var OUTPUT_BRDBUFF  = "brd";
+//var OUTPUT_MCHBUFF  = "mch";
 //var OUTPUT_MNKBUFF  = "mnk";
 //var OUTPUT_DRGBUFF  = "drg";
 //var OUTPUT_SMNBUFF  = "smn";

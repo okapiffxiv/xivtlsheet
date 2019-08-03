@@ -175,10 +175,12 @@ Convert2FfxivPlugin.prototype.parseLine = function(data) {
     val["type"] = AC_EFFECT;
     val["who"] = text.replace(/^.*\sfrom\s(.*)\sfor\s[0-9\.]*\sSeconds\.$/g, "$1");
     val["event"] = text.replace(/^.*\sgains\sthe\seffect\sof\s(.*)\sfrom\s.*$/g, "$1");
-    val["whom"] = text.replace(/^1A:(.*)\sgains.*$/g, "$1");
+    val["whom"] = text.replace(/^1A:[^:]+:(.*)\sgains.*$/g, "$1");
     
     // 衰弱は無視
     if(booSkipDebuff(val["event"])) val["event"] = EVENT_UNKNOWN;
+    // エギ又はenemyは無視
+    if(booPet(val["whom"])) val["event"] = EVENT_UNKNOWN;
 
   } else if(val["type"] == "1B") {
     // マーカー
@@ -218,7 +220,7 @@ Convert2FfxivPlugin.prototype.parseLine = function(data) {
     val["type"] = AC_LOSE_EFFECT;
     val["who"]    = text.replace(/^1E:.*\sfrom\s(.*)\.$/, "$1");
     val["event"]  = text.replace(/^1E:.*\sloses\sthe\seffect\sof\s(.*)\sfrom.*\./, "$1");
-    val["whom"]   = text.replace(/^1E:(.*)\sloses\s.*$/, "$1");
+    val["whom"]   = text.replace(/^1E:[^:]+:(.*)\sloses\s.*$/, "$1");
     
     // エギ又はenemyは無視
     if(booPet(val["whom"])) val["event"] = EVENT_UNKNOWN;
@@ -269,6 +271,8 @@ Convert2FfxivPlugin.prototype.setJob = function(who, event) {
     return "Warrior";
   } else if (event == "ハードスラッシュ") {
     return "DarkKnight";
+  } else if (event == "キーンエッジ") {
+    return "Gunbreaker";
   } else if (event == "リジェネ") {
     return "WhiteMage";
   } else if (event == "鼓舞激励の策") {
@@ -287,6 +291,8 @@ Convert2FfxivPlugin.prototype.setJob = function(who, event) {
     return "Bard";
   } else if (event == "スプリットショット") {
     return "Machinist";
+  } else if (event == "カスケード") {
+    return "Dancer";
   } else if (event == "エノキアン") {
     return "BlackMage";
   } else if (event == "ミアズマバースト") {

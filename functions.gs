@@ -47,7 +47,7 @@ function booOutputTypeJob(outputType) {
 // Petかどうか
 function booPet(who) {
   if (typeof who != "string" || who == null || who == "") return false;
-  return who.match(/(カーバンクル|タレット|エギ|フェアリー|デミ・バハムート|デミ・フェニックス)/);
+  return who.match(/(カーバンクル・|オートタレット・|・エギ|フェアリー|デミ・|セラフィム|英雄の影身|オートマトン・クイーン|分身)/);
 }
 
 // 敵かどうか
@@ -62,20 +62,20 @@ function booAA(event) {
   return false;
 }
 
-// 歌別のセル値を出力
-function BRD_SongValue(event) {
-  var value = null;
-  
-  if(event.match(new RegExp(BRD_Menuett))) {
-    value = 1;
-  } else if(event.match(new RegExp(BRD_Ballade))) {
-    value = 2;
-  } else if(event.match(new RegExp(BRD_Pion))) {
-    value = 3;
-  }
-  
-  return value;
-}
+//// 歌別のセル値を出力
+//function BRD_SongValue(event) {
+//  var value = null;
+//  
+//  if(event.match(new RegExp(BRD_Menuett))) {
+//    value = 1;
+//  } else if(event.match(new RegExp(BRD_Ballade))) {
+//    value = 2;
+//  } else if(event.match(new RegExp(BRD_Pion))) {
+//    value = 3;
+//  }
+//  
+//  return value;
+//}
 
 // フローのセル値を出力
 function SMN_FlowValue(event) {
@@ -153,7 +153,10 @@ function getUserName() {
 function booName2Cell(event) {
   if (event == "インターベンション" || 
       event == "かばう" || 
+      event == "原初の猛り" || 
       event == "ブラックナイト" || 
+      event == "オーロラ" || 
+      event == "ハート・オブ・ストーン" || 
       event == "アポカタスタシス" || 
       event == "ベネディクション" || 
       event == "テトラグラマトン" || 

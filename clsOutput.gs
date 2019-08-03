@@ -269,7 +269,7 @@ clsOutput.prototype.outputBuffCol = function(val, jobs) {
     // LB
     if (this.outputType == OUTPUT_RAIDBUFF) {
       var lbCol = LB_OutputBuffCol(event, type);
-      if(lbCol > 0) col = 16;
+      if(lbCol > 0) col = 18;
     }
     
     // ジョブ別

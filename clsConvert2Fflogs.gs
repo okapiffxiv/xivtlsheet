@@ -158,6 +158,7 @@ Convert2Fflogs.prototype.data2Parse = function(logCode, fId, jobName) {
 
   
   // フィルタリング
+  Logger.log(this.tlType);
   for (var idx in logs) {
     var log = logs[idx];
 
