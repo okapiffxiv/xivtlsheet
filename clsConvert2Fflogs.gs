@@ -6,6 +6,7 @@ var Convert2Fflogs = function(outputType, job) {
   // バトルログを取得
   var fightCode = dialogFflogs();
   if (!fightCode) return;
+  fightCode = fightCode.replace(/^.*\/reports\//, '').replace(/\&.*$/, '');
   var logCode = fightCode.replace(/(.*)\/?#fight=.*$/, "$1");
   var fId =　fightCode.replace(/.*fight=(.*?)(&|$)/, "$1");
   

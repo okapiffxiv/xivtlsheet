@@ -313,7 +313,7 @@ Heal_OutputBuff.prototype.DNC = function (who, type, event, whom) {
     col = 1;
   } else if(whom == this.userName && (type == AC_EFFECT || type == AC_LOSE_EFFECT) && event == "守りのサンバ") {
     col = 2;
-  } else if(whom == this.userName && (type == AC_EFFECT || type == AC_LOSE_EFFECT) && event == "インプロビゼーション") {
+  } else if(whom == this.userName && (type == AC_EFFECT || type == AC_LOSE_EFFECT) && event == "インプロビゼーション：効果") {
     col = 3;
   } else if(type == AC_ACTION && event == "内丹") {
     col = 4;
