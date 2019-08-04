@@ -59,7 +59,7 @@ Convert2FfxivPlugin.prototype.data2Parse = function() {
     
     // Unknownはスキップ
     if (data["event"].match(/Unknown/)) continue;
-        
+
     var val = getTlValue({
       "time" : sec2Time(data["time"] - this.startTime), 
       "type" : data["type"],
@@ -140,7 +140,7 @@ Convert2FfxivPlugin.prototype.parseLine = function(data) {
   
   text = data.replace(/^\[\d{2}:\d{2}:\d{2}\.\d{3}\]\s/g, "");
   
-  val["time"]  = data.replace(/^\[(\d{2}:\d{2}:\d{2}\.\d{3})\].*/g, "$1");
+  val["time"]  = data.replace(/^\[([^\]]+)\].*$/g, "$1");
   val["time"]  = time2Sec(val["time"], this.startTime);
   val["type"]  = text.replace(/^([0-9A-Z]{2}):.*/g, "$1");
   val["who"]   = "";
@@ -227,8 +227,8 @@ Convert2FfxivPlugin.prototype.parseLine = function(data) {
     
   } else {
     val["event"] = EVENT_UNKNOWN;
-  }  
-    
+  }
+
   if (val["type"] == AC_DIALOG ||
       val["type"] == AC_CONBATSTART ||
       val["type"] == AC_COMBATEND ||

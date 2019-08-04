@@ -110,13 +110,14 @@ function time2Sec(time, startTime) {
 
 // 時間に変換
 function sec2Time(time) {
+  if (time < 0) time = 0;
   var minute = Math.floor(time/ 60);
   var second = time % 60;
   
   if(minute < 10) minute = "0" + minute;
   if(second < 10) second = "0" + second;
-    
-  return "00:" + minute + ":" + second;
+  
+  return ("00:" + minute + ":" + second);
 }
 
 // Date型をフォーマット
