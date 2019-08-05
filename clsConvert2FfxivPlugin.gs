@@ -2,7 +2,7 @@
 // FFXIV_ACT_PLUGINからタイムラインを作成
 ////////////////////////////////////////
 
-var Convert2FfxivPlugin = function(outputType) {
+var Convert2FfxivPlugin = function(outputType, job) {
   // 出力する対象
   this.outputType = outputType;
   
@@ -17,7 +17,7 @@ var Convert2FfxivPlugin = function(outputType) {
   this.userName = getUserName();
   
   // 出力クラス
-  this.clsOutput = new clsOutput(this.outputType, this.startRow,　this.tlType, this.userName);
+  this.clsOutput = null;
   
   // シート名
   if (this.outputType == OUTPUT_LOG) {
@@ -32,14 +32,14 @@ var Convert2FfxivPlugin = function(outputType) {
     return;
   }
   
-  this.data2Parse();
+  this.data2Parse(job);
   
   return true;
 }
 
 
 // データをパース
-Convert2FfxivPlugin.prototype.data2Parse = function() {
+Convert2FfxivPlugin.prototype.data2Parse = function(jobName) {
   var objSheet = SpreadsheetApp.getActive().getSheetByName(SHEET_IMPORT);
   var iValues = objSheet.getDataRange().getValues();
   var iLastRow = iValues.length;
@@ -53,7 +53,7 @@ Convert2FfxivPlugin.prototype.data2Parse = function() {
   
   // Logのデータを１行ずつループ
   var logs = [];
-  var jobs = [];
+  var jobs = {};
   for(var rowNum=1;rowNum<iLastRow;rowNum++) {
     var data  = this.parseLine(iValues[rowNum][0]);
     
@@ -83,6 +83,20 @@ Convert2FfxivPlugin.prototype.data2Parse = function() {
     if(this.endTime != null) break;
   }
   
+  if (this.outputType != OUTPUT_TIMELINE) {
+    // ユーザの設定
+    var friendlies = [];
+    for (userName in jobs) friendlies.push({'type': jobs[userName], 'name': userName});
+    
+    if (jobName == undefined) {
+      this.userName = dialogJob(friendlies);
+    } else {
+      this.userName = getFriendryName(jobName, friendlies)
+    }
+    if (!this.userName) return false;
+  }
+
+  this.clsOutput = new clsOutput(this.outputType, this.startRow,　this.tlType, this.userName);
 
   // フィルタリング
   for (var idx in logs) {
@@ -101,7 +115,6 @@ Convert2FfxivPlugin.prototype.data2Parse = function() {
     }
   }
   
-
   // 終了時間の設定
   if(this.endTime == null && oValues.length > 0) {
     this.endTime = oValues[oValues.length - 1]["time"];
@@ -204,10 +217,7 @@ Convert2FfxivPlugin.prototype.parseLine = function(data) {
     val["who"]   = val["who"].replace(/^([^:]*):.*$/, "$1");
     
     val["event"] = text.replace(/^(15|16):[0-9A-Z]{8}:/, "");
-    val["event"] = val["event"].replace(/:[0-9A-Z]{8}:.+$/, "");
-    val["event"] = val["event"].replace(/^.*:[0-9A-Z]{2,4}:/, "");
-    val["event"] = val["event"].replace(/^:[0-9A-Z]{2,4}:/, "");
-  
+    val["event"] = val["event"].replace(/:[0-9A-Z]{8}:.+$/, "").replace(/^.*:[0-9A-Z]{2,4}:/, "").replace(/^:[0-9A-Z]{2,4}:/, "");
 
     val["whom"] = text.replace(new RegExp(".*" + val["event"] + ":[0-9A-Z]{8}:"), "");
     val["whom"] = val["whom"].replace(/^([^:]*):.*$/, "$1");
@@ -228,7 +238,7 @@ Convert2FfxivPlugin.prototype.parseLine = function(data) {
   } else {
     val["event"] = EVENT_UNKNOWN;
   }
-
+  
   if (val["type"] == AC_DIALOG ||
       val["type"] == AC_CONBATSTART ||
       val["type"] == AC_COMBATEND ||

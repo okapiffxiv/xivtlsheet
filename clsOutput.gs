@@ -110,7 +110,8 @@ clsOutput.prototype.booContinue = function(oValues, val) {
 
 
 // タイムラインにバフを出力
-clsOutput.prototype.outputallbuff = function(sheet, startRow, vals, jobs) {
+clsOutput.prototype.outputallbuff = function(sheet, startRow, vals, jobs)
+{
   var lastRow = sheet.getLastRow();
   var col = this.outputBuffCol(vals, jobs);
   var secTime = time2Sec(vals["time"]);
@@ -165,7 +166,7 @@ clsOutput.prototype.outputallbuff = function(sheet, startRow, vals, jobs) {
       } else {
         var who  = vals["who"].replace(/\s.*$/, "");
         var whom = vals["whom"].replace(/\s.*$/, "");
-        var cValue = null;
+        var cValue = 1;
   
 
         if (booName2Cell(vals["event"])) {
@@ -177,21 +178,18 @@ clsOutput.prototype.outputallbuff = function(sheet, startRow, vals, jobs) {
           // LB系
           cValue = vals["event"];
         
-        } else if (this.outputType == OUTPUT_BRDBUFF && BRD_SongValue(vals["event"]) != null) {
-          // 詩人歌
-          cValue = BRD_SongValue(vals["event"]);
-          this.outputPadCell(sheet, row, col);
-          
-        } else if (vals["event"].match(/^トルバドゥール/)) {
-          // トルバ系
-          cValue = BRD_SongValue(vals["event"]);
-          
-        }  else if (this.outputType == OUTPUT_SMNBUFF && SMN_FlowValue(vals["event"]) != null) {
-          // 召喚、フロー消化
-          cValue = SMN_FlowValue(vals["event"]);
-          
-        } else {
-          cValue = 1;
+        }  else if (this.outputType == OUTPUT_SMNBUFF) {
+          // 召喚
+          if (SMN_RuinValue(vals["event"]) != null) {
+            cValue = SMN_RuinValue(vals["event"]);
+
+          } else if (SMN_EnagyValue(vals["event"]) != null) {
+            cValue = SMN_EnagyValue(vals["event"]);
+
+          } else if (SMN_FlowValue(vals["event"]) != null) {
+            cValue = SMN_FlowValue(vals["event"]);
+
+          }
         }
 
         if (cValue != null) sheet.getRange(row, col).setValue(cValue);
@@ -261,6 +259,7 @@ clsOutput.prototype.outputBuffCol = function(val, jobs) {
   var event   = val["event"];
   var whom    = val["whom"];
       
+  Logger.log(this.userName);
   // シナジー系
   if (this.outputType != OUTPUT_ALLBUFF) {
     var raidCol = RAIDBUFF_OutputBuffCol(who, whom, type, event, this.userName);
@@ -285,7 +284,6 @@ clsOutput.prototype.outputBuffCol = function(val, jobs) {
   
   }
    
-  
   
   return col;
 }

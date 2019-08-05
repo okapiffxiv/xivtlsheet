@@ -63,12 +63,14 @@ Convert2Fflogs.prototype.data2Parse = function(logCode, fId, jobName) {
   this.enemies = this.getPartyData("enemies", jsonFights, fId);
   
   // ユーザの設定
-  if (jobName == undefined) {
-    this.userName = dialogJob(this.friendlies);
-  } else {
-    this.userName = getFriendryName(jobName, this.friendlies)
+  if (this.outputType != OUTPUT_TIMELINE) {
+    if (jobName == undefined) {
+      this.userName = dialogJob(this.friendlies);
+    } else {
+      this.userName = getFriendryName(jobName, this.friendlies)
+    }
+    if (!this.userName) return false;
   }
-  if (!this.userName) return false;
   
   // Job {user : job}
   var jobs = this.getPartyJob("friendlies", jsonFights, fId);
@@ -159,7 +161,6 @@ Convert2Fflogs.prototype.data2Parse = function(logCode, fId, jobName) {
 
   
   // フィルタリング
-  Logger.log(this.tlType);
   for (var idx in logs) {
     var log = logs[idx];
 

@@ -41,7 +41,8 @@ function　getTlValue(datas) {
 // ジョブ別バフを返すのか
 function booOutputTypeJob(outputType) {
   var obj = new Job_OutputBuff(outputType, "", "", "", "");
-  return obj.getoutputTypeJob();
+  obj.getoutputTypeJob();
+  return obj.jobName;
 }
 
 // Petかどうか
@@ -58,37 +59,42 @@ function booEnemy(who) {
 
 // オートアタックか
 function booAA(event) {
-  if(event == "攻撃" || event == "ショット" || event == "ウィルムウェーブ" || event == "光の癒し") return true;
+  if(event == "攻撃" || event == "ショット" || event == "光の癒し") return true;
   return false;
 }
 
-//// 歌別のセル値を出力
-//function BRD_SongValue(event) {
-//  var value = null;
-//  
-//  if(event.match(new RegExp(BRD_Menuett))) {
-//    value = 1;
-//  } else if(event.match(new RegExp(BRD_Ballade))) {
-//    value = 2;
-//  } else if(event.match(new RegExp(BRD_Pion))) {
-//    value = 3;
-//  }
-//  
-//  return value;
-//}
+// 召喚を出力
+function SMN_RuinValue(event) {
+  var value = null;
+  
+  if(event == "ルインラ") {
+    value = 1;
+  } else if(event == "ルインジャ") {
+    value = 2;
+  }
+  
+  return value;
+}
 
-// フローのセル値を出力
+function SMN_EnagyValue(event) {
+  var value = null;
+  
+  if(event == "エナジードレイン") {
+    value = 1;
+  } else if(event == "エナジーサイフォン") {
+    value = 2;
+  }
+  
+  return value;
+}
+
 function SMN_FlowValue(event) {
   var value = null;
   
-  if(event.match(/ミアズマバースト/)) {
+  if(event == "ミアズマバースト") {
     value = 1;
-  } else if(event.match(/ペインフレア/)) {
+  } else if(event == "ペインフレア") {
     value = 2;
-  } else if(event.match(/ベイン/)) {
-    value = 3;
-  } else if(event.match(/エナジードレイン/)) {
-    value = 4;
   }
   
   return value;

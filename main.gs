@@ -99,37 +99,37 @@ function バフをインポート() {
 
 function 詩人情報をインポート() {
   copyTempSheets_(TMP_BRD);
-  new Convert2FfxivPlugin(OUTPUT_BRDBUFF);
+  new Convert2FfxivPlugin(OUTPUT_BRDBUFF, "Bard");
 }
 
 function 機工士情報をインポート() {
   copyTempSheets_(TMP_BRD);
-  new Convert2FfxivPlugin(OUTPUT_MCHBUFF);
+  new Convert2FfxivPlugin(OUTPUT_MCHBUFF, "Machinist");
 }
 
 function モンク情報をインポート() {
   copyTempSheets_(TMP_MNK);
-  new Convert2FfxivPlugin(OUTPUT_MNKBUFF);
+  new Convert2FfxivPlugin(OUTPUT_MNKBUFF, "Monk");
 }
 
 function 竜情報をインポート() {
   copyTempSheets_(TMP_DRG);
-  new Convert2FfxivPlugin(OUTPUT_DRGBUFF);
+  new Convert2FfxivPlugin(OUTPUT_DRGBUFF, "Dragoon");
 }
 
 function 召喚情報をインポート() {
   copyTempSheets_(TMP_SMN);
-  new Convert2FfxivPlugin(OUTPUT_SMNBUFF);
+  new Convert2FfxivPlugin(OUTPUT_SMNBUFF, "Summoner");
 }
 
 function 戦士情報をインポート() {
   copyTempSheets_(TMP_WAR);
-  new Convert2FfxivPlugin(OUTPUT_WARBUFF);
+  new Convert2FfxivPlugin(OUTPUT_WARBUFF, "Warrior");
 }
 
 function ナイト情報をインポート() {
   copyTempSheets_(TMP_PLD);
-  new Convert2FfxivPlugin(OUTPUT_PLDBUFF);
+  new Convert2FfxivPlugin(OUTPUT_PLDBUFF, "Paladin");
 }
 
 function ViewLogをインポート() {

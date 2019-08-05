@@ -1,7 +1,7 @@
 ////////////////////////////////////////
 // 共通定義
 ////////////////////////////////////////
-var VERSION = "2.２.0";
+var VERSION = "2.3.0";
 var objSheet;
 var timezone = 'JST';
 var COL_OUTPUT_SKILL = "C2";
@@ -77,7 +77,7 @@ var AC_REFRESH = 11;
 
 // 横軸カラム数
 var CNT_TIMELINE_COL   = 4;
-var CNT_RAIDBUFF_COL   = 11;
+var CNT_RAIDBUFF_COL   = 13;
 var CNT_BARRIER_COL    = 13;
 var CNT_BARRIERALL_COL = 3;
 var CNT_DOWN_COL       = 5;

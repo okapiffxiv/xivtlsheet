@@ -204,32 +204,46 @@ Job_OutputBuff.prototype.PLD = function(type, event) {
 Job_OutputBuff.prototype.SMN = function(who, type, event, whom) {
   var col = null; 
 
-  if((
-    (booPet(who) && type == AC_EFFECT) ||
-    (booEnemy(whom) && type == AC_LOSE_EFFECT)) && event == "被魔法ダメージ増加") {
+  if((type == AC_EFFECT || type == AC_LOSE_EFFECT) && event == "ルイネーション") {
     col = 1;
   } else if((type == AC_ACTION || type == AC_REFRESH) && event == "トライディザスター") {
     col = 2;
-  } else if((type == AC_EFFECT || type == AC_LOSE_EFFECT) && event == "ラウズ") {
-    col = 3;
-  } else if(type == AC_ACTION && event == "エンキンドル") {
-    col = 4;
   } else if((type == AC_ACTION || type == AC_REFRESH) && event == "ミアズガ") {
-    col = 5;
+    col = 3;
   } else if((type == AC_ACTION || type == AC_REFRESH) && event == "バイオガ") {
+    col = 4;
+  } else if((type == AC_ACTION || type == AC_REFRESH) && event == "ルインガ") {
+    col = 5;
+  } else if(who == this.userName && type == AC_ACTION && SMN_RuinValue(event) != null) {
     col = 6;
-  } else if(who == this.userName && type == AC_ACTION && event == "エーテルフロー") {
+  } else if(who == this.userName && type == AC_ACTION && SMN_EnagyValue(event) != null) {
     col = 7;
   } else if(who == this.userName && type == AC_ACTION && SMN_FlowValue(event) != null) {
     col = 8;
-  } else if(type == AC_ACTION && event == "トランス・バハムート") {
+  } else if(type == AC_ACTION && event.match(/^エギアサルトi：/)) {
     col = 9;
-  } else if(type == AC_ACTION && event == "デスフレア") {
+  } else if(type == AC_ACTION && event.match(/^エギアサルトii：/)) {
     col = 10;
-  } else if(type == AC_ACTION && event == "サモン・バハムート") {
+  } else if(type == AC_ACTION && event.match(/^エンキンドル：/)) {
     col = 11;
-  } else if(type == AC_ACTION && event == "アク・モーン") {
+  } else if(type == AC_ACTION && event == "トランス・バハムート") {
     col = 12;
+  } else if(type == AC_ACTION && event == "デスフレア") {
+    col = 13;
+  } else if(type == AC_ACTION && event == "サモン・バハムート") {
+    col = 14;
+  } else if(type == AC_ACTION && event == "ウィルムウェーブ") {
+    col = 15;
+  } else if(type == AC_ACTION && event == "アク・モーン") {
+    col = 16;
+  } else if(type == AC_ACTION && event == "トランス・フェニックス") {
+    col = 17;
+  } else if(type == AC_ACTION && event == "霊泉の炎") {
+    col = 18;
+  } else if(type == AC_ACTION && event == "煉獄の炎") {
+    col = 19;
+  } else if(type == AC_ACTION && event == "リヴァレーション") {
+    col = 20;
   }
 
   if (col != null) col = this.baseCol + col;
