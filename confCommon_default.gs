@@ -100,8 +100,3 @@
 //var ERR_NO_LOGS = "logsシートがありません";
 //var ERR_NO_SETTING = "未設定";
 //var ERR_LINK_GITHUB = "タイムラインシートのバージョン管理はgithubで行っています。\\n最新バージョンの確認、スプレットシートの入手は以下のURLへアクセスしてください\\n\\nhttps://github.com/okapiffxiv/xivtlsheet";
-//
-//// BRD定義
-//var BRD_Menuett　= "メヌエット";
-//var BRD_Ballade　= "バラード";
-//var BRD_Pion   　= "パイオン";

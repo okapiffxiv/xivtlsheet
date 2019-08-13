@@ -15,8 +15,13 @@ function getOutputTo(tmpName) {
 function getStartRow(tmpName) {
   if(OUTPUT_ALLBUFF == tmpName) {
     return allStartRow;
-  } else {
+
+  } else if ([OUTPUT_TIMELINE, OUTPUT_LOG].indexOf(tmpName) >= 0) {
     return oStartRow;
+
+  } else {
+    return jStartRow;
+
   }
 }
 
@@ -64,18 +69,6 @@ function booAA(event) {
 }
 
 // 召喚を出力
-function SMN_RuinValue(event) {
-  var value = null;
-  
-  if(event == "ルインラ") {
-    value = 1;
-  } else if(event == "ルインジャ") {
-    value = 2;
-  }
-  
-  return value;
-}
-
 function SMN_EnagyValue(event) {
   var value = null;
   

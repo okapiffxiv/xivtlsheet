@@ -180,10 +180,7 @@ clsOutput.prototype.outputallbuff = function(sheet, startRow, vals, jobs)
         
         }  else if (this.outputType == OUTPUT_SMNBUFF) {
           // 召喚
-          if (SMN_RuinValue(vals["event"]) != null) {
-            cValue = SMN_RuinValue(vals["event"]);
-
-          } else if (SMN_EnagyValue(vals["event"]) != null) {
+          if (SMN_EnagyValue(vals["event"]) != null) {
             cValue = SMN_EnagyValue(vals["event"]);
 
           } else if (SMN_FlowValue(vals["event"]) != null) {

@@ -1,15 +1,16 @@
 ////////////////////////////////////////
 // 共通定義
 ////////////////////////////////////////
-var VERSION = "2.3.0";
+var VERSION = "2.3.1";
 var objSheet;
 var timezone = 'JST';
 var COL_OUTPUT_SKILL = "C2";
 var COL_USER_NAME = "C3";
 
 // 出力カラム
-var oStartRow = 2;
+var oStartRow   = 2;
 var allStartRow = 5;
+var jStartRow   = 4;
 
 // 行を追加する秒数
 var OVERSEC = 3;
@@ -110,8 +111,3 @@ var ERR_NO_LOGS = "logsシートがありません";
 var ERR_NO_SETTING = "未設定";
 var ERR_NO_URL = "データが存在しません";
 var ERR_LINK_GITHUB = "タイムラインシートのバージョン管理はgithubで行っています。\\n最新バージョンの確認、スプレットシートの入手は以下のURLへアクセスしてください\\n\\nhttps://github.com/okapiffxiv/xivtlsheet";
-
-// BRD定義
-var BRD_Menuett　= "メヌエット";
-var BRD_Ballade　= "バラード";
-var BRD_Pion   　= "パイオン";

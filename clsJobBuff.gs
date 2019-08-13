@@ -212,38 +212,34 @@ Job_OutputBuff.prototype.SMN = function(who, type, event, whom) {
     col = 3;
   } else if((type == AC_ACTION || type == AC_REFRESH) && event == "バイオガ") {
     col = 4;
-  } else if((type == AC_ACTION || type == AC_REFRESH) && event == "ルインガ") {
-    col = 5;
-  } else if(who == this.userName && type == AC_ACTION && SMN_RuinValue(event) != null) {
-    col = 6;
   } else if(who == this.userName && type == AC_ACTION && SMN_EnagyValue(event) != null) {
-    col = 7;
+    col = 5;
   } else if(who == this.userName && type == AC_ACTION && SMN_FlowValue(event) != null) {
+    col = 6;
+  } else if(type == AC_ACTION && ['エリアルスラッシュ', '大地の鎧', 'クリムゾンサイクロン'].indexOf(event) >= 0) {
+    col = 7;
+  } else if(type == AC_ACTION && ['スリップストリーム', 'マウンテンバスター', 'フレイミングクラッシュ'].indexOf(event) >= 0) {
     col = 8;
-  } else if(type == AC_ACTION && event.match(/^エギアサルトi：/)) {
+  } else if(type == AC_ACTION && ['エリアルブラスト', '大地の怒り', '地獄の火炎'].indexOf(event) >= 0) {
     col = 9;
-  } else if(type == AC_ACTION && event.match(/^エギアサルトii：/)) {
-    col = 10;
-  } else if(type == AC_ACTION && event.match(/^エンキンドル：/)) {
-    col = 11;
   } else if(type == AC_ACTION && event == "トランス・バハムート") {
-    col = 12;
+    col = 10;
   } else if(type == AC_ACTION && event == "デスフレア") {
-    col = 13;
+    col = 11;
   } else if(type == AC_ACTION && event == "サモン・バハムート") {
-    col = 14;
+    col = 12;
   } else if(type == AC_ACTION && event == "ウィルムウェーブ") {
-    col = 15;
+    col = 13;
   } else if(type == AC_ACTION && event == "アク・モーン") {
-    col = 16;
+    col = 14;
   } else if(type == AC_ACTION && event == "トランス・フェニックス") {
-    col = 17;
+    col = 15;
   } else if(type == AC_ACTION && event == "霊泉の炎") {
-    col = 18;
+    col = 16;
   } else if(type == AC_ACTION && event == "煉獄の炎") {
-    col = 19;
+    col = 17;
   } else if(type == AC_ACTION && event == "リヴァレーション") {
-    col = 20;
+    col = 18;
   }
 
   if (col != null) col = this.baseCol + col;
