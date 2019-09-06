@@ -149,7 +149,7 @@ Convert2Fflogs.prototype.data2Parse = function(logCode, fId, jobName) {
         "type" : type,
         "who"  : who,
         "whom" : whom,
-        "event": ability
+        "event": ability,
       });
       
       val["booFriendly"] = event["sourceIsFriendly"];
@@ -163,14 +163,19 @@ Convert2Fflogs.prototype.data2Parse = function(logCode, fId, jobName) {
   // フィルタリング
   for (var idx in logs) {
     var log = logs[idx];
+    var duplicateIdx = this.clsOutput.duplicateIdx(oValues, log);
+    if (duplicateIdx) {
+      oValues[duplicateIdx]['count']++;
+      continue;
+    }
 
     if (this.tlType == OUTPUT_TIMELINE && !log["booFriendly"]) {
       if (log["type"] == AC_LOSE_EFFECT) continue;
-      if (!this.clsOutput.booContinue(oValues, log)) oValues.push(log);
+      if (!this.clsOutput.booContinue(log)) oValues.push(log);
       
     } else {
       if (this.tlType == OUTPUT_SKILL) {
-        if (!this.clsOutput.booContinue(oValues, log)) oValues.push(log);
+        if (!this.clsOutput.booContinue(log)) oValues.push(log);
       }
       if (this.outputType != OUTPUT_TIMELINE && this.outputType != OUTPUT_LOG) {
         if (this.clsOutput.outputBuffCol(log, jobs) != null) oBuffs.push(log);

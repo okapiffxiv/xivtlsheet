@@ -33,6 +33,7 @@ function　getTlValue(datas) {
     "who": "", 
     "whom" : "",
     "event": "",
+    "count": 1,
     "log"  : ""
   };
   

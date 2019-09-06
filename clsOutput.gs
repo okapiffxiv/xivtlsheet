@@ -24,7 +24,6 @@ clsOutput.prototype.outputTimeline = function(sheet, vals) {
       type = "戦闘開始";
     } else if(vals[i]["type"] == AC_DIALOG) {
       type = "セリフ";
-      text = vals[i]["event"];
     } else if(vals[i]["type"] == AC_MARKER) {
       type = "マーカー";
       text = "";
@@ -33,7 +32,6 @@ clsOutput.prototype.outputTimeline = function(sheet, vals) {
       text = vals[i]["event"].replace(/^effect\s/g, "");
     } else if(vals[i]["type"] == AC_LOSE_EFFECT) {
       type = "効果切れ";
-      text = vals[i]["event"];
     }  else if(vals[i]["type"] == AC_AOE) {
       type = "AOE";
     } else if(vals[i]["type"] == AC_START_USING) {
@@ -48,6 +46,12 @@ clsOutput.prototype.outputTimeline = function(sheet, vals) {
       type = "";
     }
     
+    // AOEとマーカーと効果は被り数も表示
+    if ((vals[i]["type"] == AC_AOE || vals[i]["type"] == AC_MARKER || vals[i]["type"] == AC_EFFECT)
+        && vals[i]["count"] > 1) {
+      text += " x" + vals[i]["count"];
+    }
+
     val.push(vals[i]["time"]); 
     if (this.tlType == OUTPUT_SKILL) {
       val.push(vals[i]["whom"]); 
@@ -69,9 +73,7 @@ clsOutput.prototype.outputTimeline = function(sheet, vals) {
 
 
 // 除外対象のレコードか
-clsOutput.prototype.booContinue = function(oValues, val) {
-  var oCount = oValues.length;
-  
+clsOutput.prototype.booContinue = function(val) {  
   // logはかぶりも全部出力
   if (this.outputType == OUTPUT_LOG) return false;
   
@@ -91,8 +93,17 @@ clsOutput.prototype.booContinue = function(oValues, val) {
 
   // 自分以外のスキルはスキップ
   if (this.tlType == OUTPUT_SKILL && val["who"] != this.userName) return　true;
-  
-  // スキル被りはスキップ
+    
+  return false;
+}
+
+
+// スキル被り
+clsOutput.prototype.duplicateIdx = function(oValues, val) {
+  // logはかぶりも全部出力
+  if (this.outputType == OUTPUT_LOG) return false;
+
+  var oCount = oValues.length;
   if (oCount > 0) {
     for (var i = oCount - 1; i >= 0; i--) {
       if (oValues[i]["time"] != val["time"]) break;
@@ -100,7 +111,7 @@ clsOutput.prototype.booContinue = function(oValues, val) {
           && oValues[i]["type"] == val["type"] 
           && oValues[i]["who"] == val["who"] 
           && oValues[i]["event"] == val["event"]) {
-        return true;
+        return i;
       }
     }
   }
