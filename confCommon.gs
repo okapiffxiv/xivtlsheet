@@ -1,7 +1,7 @@
 ////////////////////////////////////////
 // 共通定義
 ////////////////////////////////////////
-var VERSION = "2.3.1";
+var VERSION = "2.4.0";
 var objSheet;
 var timezone = 'JST';
 var COL_OUTPUT_SKILL = "C2";
@@ -41,6 +41,7 @@ var TMP_BUFF = "temp(buff)";
 var TMP_BRD  = "temp(BRD)";
 var TMP_MNK  = "temp(MNK)";
 var TMP_DRG  = "temp(DRG)";
+var TMP_BLM  = "temp(BLM)";
 var TMP_SMN  = "temp(SMN)";
 var TMP_WAR  = "temp(WAR)";
 var TMP_PLD  = "temp(PLD)";
@@ -57,6 +58,7 @@ var OUTPUT_BRDBUFF  = "brd";
 var OUTPUT_MCHBUFF  = "mch";
 var OUTPUT_MNKBUFF  = "mnk";
 var OUTPUT_DRGBUFF  = "drg";
+var OUTPUT_BLMBUFF  = "blm";
 var OUTPUT_SMNBUFF  = "smn";
 var OUTPUT_WARBUFF  = "war";
 var OUTPUT_PLDBUFF  = "pld";

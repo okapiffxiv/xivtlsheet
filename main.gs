@@ -65,6 +65,11 @@ function Logsから竜情報をインポート() {
   new Convert2Fflogs(OUTPUT_DRGBUFF, "Dragoon");
 }
 
+function Logsから黒魔情報をインポート() {
+  copyTempSheets_(TMP_BLM);
+  new Convert2Fflogs(OUTPUT_BLMBUFF, "BlackMage");
+}
+
 function Logsから召喚情報をインポート() {
   copyTempSheets_(TMP_SMN);
   new Convert2Fflogs(OUTPUT_SMNBUFF, "Summoner");
@@ -115,6 +120,11 @@ function モンク情報をインポート() {
 function 竜情報をインポート() {
   copyTempSheets_(TMP_DRG);
   new Convert2FfxivPlugin(OUTPUT_DRGBUFF, "Dragoon");
+}
+
+function 黒魔情報をインポート() {
+  copyTempSheets_(TMP_BLM);
+  new Convert2FfxivPlugin(OUTPUT_BLMBUFF, "BlackMage");
 }
 
 function 召喚情報をインポート() {

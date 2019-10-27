@@ -33,6 +33,9 @@ Job_OutputBuff.prototype.getCol = function() {
   } else if(this.outputType == OUTPUT_PLDBUFF) {
     return this.PLD(this.type, this.event);
 
+  } else if(this.outputType == OUTPUT_BLMBUFF) {
+    return this.BLM(this.who, this.type, this.event);
+
   } else if(this.outputType == OUTPUT_SMNBUFF) {
     return this.SMN(this.who, this.type, this.event, this.whom);
   }
@@ -195,6 +198,47 @@ Job_OutputBuff.prototype.PLD = function(type, event) {
     col = 8;
   }
 
+  if (col != null) col = this.baseCol + col;
+  return col;
+}
+
+
+// 黒魔道士
+Job_OutputBuff.prototype.BLM = function(who, type, event) {
+  var col = null;
+
+  if(type == AC_ACTION && event == "三連魔") {
+    col = 1;
+  } else if(who == this.userName && type == AC_ACTION && event == "迅速魔") {
+    col = 2;
+  } else if((type == AC_LOSE_EFFECT || type == AC_EFFECT) && event == "黒魔紋") {
+    col = 3;
+  } else if(type == AC_ACTION && event == "マナフォント") {
+    col = 4;
+  } else if(type == AC_ACTION && event == "フレア") {
+    col = 5;
+  } else if(type == AC_ACTION && event == "ファウル") {
+    col = 6;
+  } else if(type == AC_ACTION && event == "デスペア") {
+    col = 7;
+  } else if(type == AC_ACTION && event == "ゼノグロシー") {
+    col = 8;
+  } else if(type == AC_ACTION && event == "サンダガ") {
+    col = 9;
+  } else if(type == AC_ACTION && event == "サンダジャ") {
+    col = 10;
+  } else if(type == AC_ACTION && event == "ブリザガ") {
+    col = 11;
+  } else if(type == AC_ACTION && event == "フリーズ") {
+    col = 12;
+  } else if(type == AC_ACTION && event == "ブリザジャ") {
+    col = 13;
+  } else if(type == AC_ACTION && event == "ファイガ") {
+    col = 14;
+  } else if(type == AC_ACTION && event == "ファイジャ") {
+    col = 15;
+  }
+  
   if (col != null) col = this.baseCol + col;
   return col;
 }
