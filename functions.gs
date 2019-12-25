@@ -370,4 +370,4 @@ function getResponse(path) {
   }
   
   return response;
-} 
+}

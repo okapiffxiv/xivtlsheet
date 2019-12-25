@@ -44,6 +44,9 @@ clsOutput.prototype.outputTimeline = function(sheet, vals) {
       type = "討伐中断";
     }  else if(vals[i]["type"] == AC_WAIT) {
       type = "";
+    } else if(vals[i]["type"] == AC_POP) {
+      type = "POP";
+      
     }
     
     // AOEとマーカーと効果は被り数も表示
@@ -267,7 +270,6 @@ clsOutput.prototype.outputBuffCol = function(val, jobs) {
   var event   = val["event"];
   var whom    = val["whom"];
       
-  Logger.log(this.userName);
   // シナジー系
   if (this.outputType != OUTPUT_ALLBUFF) {
     var raidCol = RAIDBUFF_OutputBuffCol(who, whom, type, event, this.userName);

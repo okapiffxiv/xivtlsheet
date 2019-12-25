@@ -83,6 +83,7 @@
 //var AC_AOE = 9;
 //var AC_FAILED = 10;
 //var AC_REFRESH = 11;
+//var AC_POP = 12;
 //
 //// 横軸カラム数
 //var CNT_TIMELINE_COL   = 4;

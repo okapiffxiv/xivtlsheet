@@ -63,7 +63,7 @@ Convert2Fflogs.prototype.data2Parse = function(logCode, fId, jobName) {
   this.enemies = this.getPartyData("enemies", jsonFights, fId);
   
   // ユーザの設定
-  if (this.outputType != OUTPUT_TIMELINE) {
+  if (this.outputType != OUTPUT_TIMELINE && this.outputType != OUTPUT_LOG) {
     if (jobName == undefined) {
       this.userName = dialogJob(this.friendlies);
     } else {

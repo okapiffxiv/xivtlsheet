@@ -5,6 +5,7 @@
 var Convert2FfxivPlugin = function(outputType, job) {
   // 出力する対象
   this.outputType = outputType;
+  this.job        = job;
   
   // startRow
   this.startRow = getStartRow(outputType);
@@ -14,7 +15,7 @@ var Convert2FfxivPlugin = function(outputType, job) {
   if (booOutputTlSkill()) this.tlType = OUTPUT_SKILL;
 
   // ユーザ名
-  this.userName = getUserName();
+  this.userName = PropertiesService.getScriptProperties().getProperty("userName");
   
   // 出力クラス
   this.clsOutput = null;
@@ -41,12 +42,13 @@ var Convert2FfxivPlugin = function(outputType, job) {
 // データをパース
 Convert2FfxivPlugin.prototype.data2Parse = function(jobName) {
   var objSheet = SpreadsheetApp.getActive().getSheetByName(SHEET_IMPORT);
+  var property = PropertiesService.getScriptProperties();
   var iValues = objSheet.getDataRange().getValues();
   var iLastRow = iValues.length;
   
   this.startTime = null;
   this.endTime   = null;
-  
+
   var oValues = [];
   var oBuffs  = [];
   
@@ -83,7 +85,7 @@ Convert2FfxivPlugin.prototype.data2Parse = function(jobName) {
     if(this.endTime != null) break;
   }
   
-  if (this.outputType != OUTPUT_TIMELINE) {
+  if (this.outputType != OUTPUT_TIMELINE && this.outputType != OUTPUT_LOG) {
     // ユーザの設定
     var friendlies = [];
     for (userName in jobs) friendlies.push({'type': jobs[userName], 'name': userName});
@@ -241,6 +243,11 @@ Convert2FfxivPlugin.prototype.parseLine = function(data) {
     
     // エギ又はenemyは無視
     if(booPet(val["whom"])) val["event"] = EVENT_UNKNOWN;
+  
+  } else if(val["type"] == "03") {
+    // ポップ
+    val["type"] = AC_POP;
+    val["who"]  = text.replace(/^03:[^:]+:Added new combatant ([^\.]+)\..*$/, "$1");
     
   } else {
     val["event"] = EVENT_UNKNOWN;
@@ -252,7 +259,8 @@ Convert2FfxivPlugin.prototype.parseLine = function(data) {
       val["type"] == AC_FAILED ||
       val["type"] == AC_MARKER ||
       (val["type"] == AC_EFFECT && (booEnemy(val["who"]) || val["who"] == "")) ||
-      (val["type"] != AC_LOSE_EFFECT && booEnemy(val["who"]))
+      (val["type"] != AC_LOSE_EFFECT && booEnemy(val["who"])) ||
+      val["type"] == AC_POP
   ) {
     // タイムライン対象
     val["timeline"] = true;
