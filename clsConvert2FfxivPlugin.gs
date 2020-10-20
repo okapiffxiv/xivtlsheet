@@ -15,7 +15,7 @@ var Convert2FfxivPlugin = function(outputType, job) {
   if (booOutputTlSkill()) this.tlType = OUTPUT_SKILL;
 
   // ユーザ名
-  this.userName = PropertiesService.getScriptProperties().getProperty("userName");
+  this.userName = getUserName();
   
   // 出力クラス
   this.clsOutput = null;
@@ -42,7 +42,6 @@ var Convert2FfxivPlugin = function(outputType, job) {
 // データをパース
 Convert2FfxivPlugin.prototype.data2Parse = function(jobName) {
   var objSheet = SpreadsheetApp.getActive().getSheetByName(SHEET_IMPORT);
-  var property = PropertiesService.getScriptProperties();
   var iValues = objSheet.getDataRange().getValues();
   var iLastRow = iValues.length;
   
