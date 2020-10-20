@@ -63,14 +63,18 @@ clsOutput.prototype.outputTimeline = function(sheet, vals) {
     }
     val.push(type); 
     val.push(text); 
-    if(this.outputType == OUTPUT_LOG) val.push(vals[i]["log"]);
-    
+
+    if(this.outputType == OUTPUT_LOG) {
+      val.push(vals[i]["log"]);      
+      val.push(MatchText(vals[i]["log"]));
+    }
+
     oVals.push(val);
   }
 
   // シートに書き込み
   var cntTlCol = CNT_TIMELINE_COL;
-  if(this.outputType == OUTPUT_LOG) cntTlCol = cntTlCol + 1;  
+  if(this.outputType == OUTPUT_LOG) cntTlCol = cntTlCol + 2;  
   sheet.getRange(this.startRow,1, valLen, cntTlCol).setValues(oVals);
 }
 
