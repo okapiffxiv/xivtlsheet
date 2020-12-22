@@ -3,10 +3,9 @@ ACTのlog、FFLogsからFF14零式コンテンツ用のタイムラインのス�
 ![タイムライン](https://i.imgur.com/Wpwljta.png)
 
 ### セットアップ
-- Googleアカウントにログイン
-- [ここをクリックして](https://docs.google.com/spreadsheets/d/1L8iDIn373U3rOGpw5KPLYQ3oE-U-BjJWxSTcbE4xbJE/copy)自分のGoogleアカウントのドライブにスプレットシートをコピー
-- メニューから「タイムライン＞ユーザ名設定」を選択
-- 承認ダイアログが出てきたら許可をクリック（[参考記事](https://www.virment.com/step-allow-google-apps-script/)）
+1. Googleアカウントにログイン
+1. [ここをクリックして](https://docs.google.com/spreadsheets/d/1L8iDIn373U3rOGpw5KPLYQ3oE-U-BjJWxSTcbE4xbJE/copy)自分のGoogleアカウントのドライブにスプレットシートをコピー
+1. 承認ダイアログが出てきたら許可をクリック（[参考記事](https://www.virment.com/step-allow-google-apps-script/)）
 
 ### アップデートの方法
 今まで使っていたGoogleスプレッドシートを削除、または閲覧用とし、もう一度スプレットシートをコピーしてください  
@@ -29,7 +28,7 @@ ACTのlog、FFLogsからFF14零式コンテンツ用のタイムラインのス�
 ### 機能
 - タイムライン表を作成
 - タイムラインと各シナジーの発動時間をグラフで表示
-- ~ジョブ別アクションとタイムラインをグラフで表示~ 召喚のみ
+- ~ジョブ別アクションとタイムラインをグラフで表示~ 召喚・黒のみ
 - 対象ユーザのスキル回しを出力
 - ACTのLogを見易い形式で表示
 
