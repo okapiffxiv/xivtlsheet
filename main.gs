@@ -45,25 +45,25 @@ function Logsからシナジーバフをインポート() {
   new Convert2Fflogs(OUTPUT_RAIDBUFF);
 }
 
-function Logsから詩人情報をインポート() {
-  copyTempSheets_(TMP_BRD);
-  new Convert2Fflogs(OUTPUT_BRDBUFF, "Bard");
-}
-
-function Logsから機工士情報をインポート() {
-  copyTempSheets_(TMP_MCH);
-  new Convert2Fflogs(OUTPUT_MCHBUFF, "Machinist");
-}
-
-function Logsからモンク情報をインポート() {
-  copyTempSheets_(TMP_MNK);
-  new Convert2Fflogs(OUTPUT_MNKBUFF, "Monk");
-}
-
-function Logsから竜情報をインポート() {
-  copyTempSheets_(TMP_DRG);
-  new Convert2Fflogs(OUTPUT_DRGBUFF, "Dragoon");
-}
+//function Logsから詩人情報をインポート() {
+//  copyTempSheets_(TMP_BRD);
+//  new Convert2Fflogs(OUTPUT_BRDBUFF, "Bard");
+//}
+//
+//function Logsから機工士情報をインポート() {
+//  copyTempSheets_(TMP_MCH);
+//  new Convert2Fflogs(OUTPUT_MCHBUFF, "Machinist");
+//}
+//
+//function Logsからモンク情報をインポート() {
+//  copyTempSheets_(TMP_MNK);
+//  new Convert2Fflogs(OUTPUT_MNKBUFF, "Monk");
+//}
+//
+//function Logsから竜情報をインポート() {
+//  copyTempSheets_(TMP_DRG);
+//  new Convert2Fflogs(OUTPUT_DRGBUFF, "Dragoon");
+//}
 
 function Logsから黒魔情報をインポート() {
   copyTempSheets_(TMP_BLM);
@@ -75,15 +75,15 @@ function Logsから召喚情報をインポート() {
   new Convert2Fflogs(OUTPUT_SMNBUFF, "Summoner");
 }
 
-function Logsから戦士情報をインポート() {
-  copyTempSheets_(TMP_WAR);
-  new Convert2Fflogs(OUTPUT_WARBUFF, "Warrior");
-}
-
-function Logsからナイト情報をインポート() {
-  copyTempSheets_(TMP_PLD);
-  new Convert2Fflogs(OUTPUT_PLDBUFF, "Paladin");
-}
+//function Logsから戦士情報をインポート() {
+//  copyTempSheets_(TMP_WAR);
+//  new Convert2Fflogs(OUTPUT_WARBUFF, "Warrior");
+//}
+//
+//function Logsからナイト情報をインポート() {
+//  copyTempSheets_(TMP_PLD);
+//  new Convert2Fflogs(OUTPUT_PLDBUFF, "Paladin");
+//}
 
 
 // pluginからインポート
@@ -102,25 +102,25 @@ function バフをインポート() {
   new Convert2FfxivPlugin(OUTPUT_ALLBUFF);
 }
 
-function 詩人情報をインポート() {
-  copyTempSheets_(TMP_BRD);
-  new Convert2FfxivPlugin(OUTPUT_BRDBUFF, "Bard");
-}
-
-function 機工士情報をインポート() {
-  copyTempSheets_(TMP_BRD);
-  new Convert2FfxivPlugin(OUTPUT_MCHBUFF, "Machinist");
-}
-
-function モンク情報をインポート() {
-  copyTempSheets_(TMP_MNK);
-  new Convert2FfxivPlugin(OUTPUT_MNKBUFF, "Monk");
-}
-
-function 竜情報をインポート() {
-  copyTempSheets_(TMP_DRG);
-  new Convert2FfxivPlugin(OUTPUT_DRGBUFF, "Dragoon");
-}
+//function 詩人情報をインポート() {
+//  copyTempSheets_(TMP_BRD);
+//  new Convert2FfxivPlugin(OUTPUT_BRDBUFF, "Bard");
+//}
+//
+//function 機工士情報をインポート() {
+//  copyTempSheets_(TMP_BRD);
+//  new Convert2FfxivPlugin(OUTPUT_MCHBUFF, "Machinist");
+//}
+//
+//function モンク情報をインポート() {
+//  copyTempSheets_(TMP_MNK);
+//  new Convert2FfxivPlugin(OUTPUT_MNKBUFF, "Monk");
+//}
+//
+//function 竜情報をインポート() {
+//  copyTempSheets_(TMP_DRG);
+//  new Convert2FfxivPlugin(OUTPUT_DRGBUFF, "Dragoon");
+//}
 
 function 黒魔情報をインポート() {
   copyTempSheets_(TMP_BLM);
@@ -132,15 +132,15 @@ function 召喚情報をインポート() {
   new Convert2FfxivPlugin(OUTPUT_SMNBUFF, "Summoner");
 }
 
-function 戦士情報をインポート() {
-  copyTempSheets_(TMP_WAR);
-  new Convert2FfxivPlugin(OUTPUT_WARBUFF, "Warrior");
-}
-
-function ナイト情報をインポート() {
-  copyTempSheets_(TMP_PLD);
-  new Convert2FfxivPlugin(OUTPUT_PLDBUFF, "Paladin");
-}
+//function 戦士情報をインポート() {
+//  copyTempSheets_(TMP_WAR);
+//  new Convert2FfxivPlugin(OUTPUT_WARBUFF, "Warrior");
+//}
+//
+//function ナイト情報をインポート() {
+//  copyTempSheets_(TMP_PLD);
+//  new Convert2FfxivPlugin(OUTPUT_PLDBUFF, "Paladin");
+//}
 
 function ViewLogをインポート() {
   copyTempSheets_(TMP_VIEWLOG, SHEET_LOG);
