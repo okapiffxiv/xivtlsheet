@@ -188,7 +188,12 @@ Convert2FfxivPlugin.prototype.parseLine = function(data) {
   } else if (text.match(/^00:0044:/)) {
     // ダイアログ系
     val["type"] = AC_DIALOG;
-    val["event"] = text.replace(/^00:0044:/g, "");
+    val["event"] = text.replace(/^[^:]+:[^:]+:/g, "");
+
+    if ((val["event"]).match(/:/)) {
+      val["who"] = (val["event"]).replace(/^([^:]+):.*$/, "$1");
+      val["event"] = (val["event"]).replace(/^[^:]+:(.*)$/, "$1");
+    }
     
   } else if(val["type"] == "1A") {
     // エフェクト
