@@ -33,14 +33,14 @@ var Convert2FfxivPlugin = function(outputType, job) {
     return;
   }
   
-  this.data2Parse(job);
+  this.data2Parse();
   
   return true;
 }
 
 
 // データをパース
-Convert2FfxivPlugin.prototype.data2Parse = function(jobName) {
+Convert2FfxivPlugin.prototype.data2Parse = function() {
   var objSheet = SpreadsheetApp.getActive().getSheetByName(SHEET_IMPORT);
   var iValues = objSheet.getDataRange().getValues();
   var iLastRow = iValues.length;
@@ -60,7 +60,6 @@ Convert2FfxivPlugin.prototype.data2Parse = function(jobName) {
     
     // Unknownはスキップ
     if (data["event"].match(/Unknown/)) continue;
-
     var val = getTlValue({
       "time" : sec2Time(data["time"] - this.startTime), 
       "type" : data["type"],
@@ -89,10 +88,10 @@ Convert2FfxivPlugin.prototype.data2Parse = function(jobName) {
     var friendlies = [];
     for (userName in jobs) friendlies.push({'type': jobs[userName], 'name': userName});
     
-    if (jobName == undefined) {
+    if (this.job == undefined) {
       this.userName = dialogJob(friendlies);
     } else {
-      this.userName = getFriendryName(jobName, friendlies)
+      this.userName = getFriendryName(this.job, friendlies)
     }
     if (!this.userName) return false;
   }
@@ -109,11 +108,11 @@ Convert2FfxivPlugin.prototype.data2Parse = function(jobName) {
     }
 
     if (this.tlType == OUTPUT_TIMELINE && log["timeline"]) {
-      if (!this.clsOutput.booContinue(oValues)) oValues.push(log);
+      if (!this.clsOutput.booContinue(log)) oValues.push(log);
       
     } else {
       if (this.tlType == OUTPUT_SKILL) {
-        if (!this.clsOutput.booContinue(oValues)) oValues.push(log);
+        if (!this.clsOutput.booContinue(log)) oValues.push(log);
       }
 
       if (this.outputType != OUTPUT_TIMELINE && this.outputType != OUTPUT_LOG) {
@@ -194,9 +193,9 @@ Convert2FfxivPlugin.prototype.parseLine = function(data) {
   } else if(val["type"] == "1A") {
     // エフェクト
     val["type"] = AC_EFFECT;
-    val["who"] = text.replace(/^.*\sfrom\s(.*)\sfor\s[0-9\.]*\sSeconds\.$/g, "$1");
+    val["who"] = text.replace(/^.*\sfrom\s(.*)\sfor\s[0-9\.]*\sSeconds\./g, "$1");
     val["event"] = text.replace(/^.*\sgains\sthe\seffect\sof\s(.*)\sfrom\s.*$/g, "$1");
-    val["whom"] = text.replace(/^1A:[^:]+:(.*)\sgains.*$/g, "$1");
+    val["whom"] = text.replace(/^[^:]+:[^:]+:(.*)\sgains.*$/g, "$1");
     
     // 衰弱は無視
     if(booSkipDebuff(val["event"])) val["event"] = EVENT_UNKNOWN;
@@ -236,7 +235,7 @@ Convert2FfxivPlugin.prototype.parseLine = function(data) {
   } else if(val["type"] == "1E") {
     // 効果切れ
     val["type"] = AC_LOSE_EFFECT;
-    val["who"]    = text.replace(/^1E:.*\sfrom\s(.*)\.$/, "$1");
+    val["who"]    = text.replace(/^1E:.*\sfrom\s(.*)\./, "$1");
     val["event"]  = text.replace(/^1E:.*\sloses\sthe\seffect\sof\s(.*)\sfrom.*\./, "$1");
     val["whom"]   = text.replace(/^1E:[^:]+:(.*)\sloses\s.*$/, "$1");
     

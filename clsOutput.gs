@@ -74,7 +74,7 @@ clsOutput.prototype.outputTimeline = function(sheet, vals) {
 
   // シートに書き込み
   var cntTlCol = CNT_TIMELINE_COL;
-  if(this.outputType == OUTPUT_LOG) cntTlCol = cntTlCol + 2;  
+  if(this.outputType == OUTPUT_LOG) cntTlCol = cntTlCol + 2;
   sheet.getRange(this.startRow,1, valLen, cntTlCol).setValues(oVals);
 }
 
