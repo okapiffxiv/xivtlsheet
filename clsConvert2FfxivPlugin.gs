@@ -199,7 +199,7 @@ Convert2FfxivPlugin.prototype.parseLine = function(data) {
     
     // 衰弱は無視
     if(booSkipDebuff(val["event"])) val["event"] = EVENT_UNKNOWN;
-    // エギ又はenemyは無視
+    // ペットは無視
     if(booPet(val["whom"])) val["event"] = EVENT_UNKNOWN;
 
   } else if(val["type"] == "1B") {
@@ -239,13 +239,18 @@ Convert2FfxivPlugin.prototype.parseLine = function(data) {
     val["event"]  = text.replace(/^1E:.*\sloses\sthe\seffect\sof\s(.*)\sfrom.*\./, "$1");
     val["whom"]   = text.replace(/^1E:[^:]+:(.*)\sloses\s.*$/, "$1");
     
-    // エギ又はenemyは無視
+    // ペットは無視
     if(booPet(val["whom"])) val["event"] = EVENT_UNKNOWN;
   
   } else if(val["type"] == "03") {
     // ポップ
     val["type"] = AC_POP;
-    val["who"]  = text.replace(/^03:[^:]+:Added new combatant ([^\.]+)\..*$/, "$1");
+    val["who"]  = text.replace(/^03:[^:]+:Added new combatant\s([^\.]*)\..*$/, "$1");
+
+    // ポップ名が空である場合は無視
+    if((val["who"]).length == 0) val["event"] = EVENT_UNKNOWN;
+    // ペットは無視
+    if(booPet(val["who"])) val["event"] = EVENT_UNKNOWN;
     
   } else {
     val["event"] = EVENT_UNKNOWN;
