@@ -127,7 +127,7 @@ clsOutput.prototype.duplicateIdx = function(oValues, val) {
 // タイムラインにバフを出力
 clsOutput.prototype.setAllbuff = function(sheet, vals, jobs)
 {
-  var maxCol = 0;
+  var maxCol = this.lines[0].length;
   
   for (var i=0; i<vals.length; i++) {
     var val = vals[i];
