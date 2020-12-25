@@ -4,11 +4,11 @@
 
 var clsOutput = function(outputType, startRow, tlType, userName) {
   this.outputType = outputType;
+  this.lines = [];
   this.startRow = startRow;
   this.tlType = tlType
   this.userName = userName;
 }
-
 
 // シートにタイムラインを出力
 clsOutput.prototype.outputTimeline = function(sheet, vals) {
@@ -72,10 +72,7 @@ clsOutput.prototype.outputTimeline = function(sheet, vals) {
     oVals.push(val);
   }
 
-  // シートに書き込み
-  var cntTlCol = CNT_TIMELINE_COL;
-  if(this.outputType == OUTPUT_LOG) cntTlCol = cntTlCol + 2;
-  sheet.getRange(this.startRow,1, valLen, cntTlCol).setValues(oVals);
+  this.lines = oVals;
 }
 
 
@@ -128,140 +125,137 @@ clsOutput.prototype.duplicateIdx = function(oValues, val) {
 
 
 // タイムラインにバフを出力
-clsOutput.prototype.outputallbuff = function(sheet, startRow, vals, jobs)
+clsOutput.prototype.setAllbuff = function(sheet, vals, jobs)
 {
-  var lastRow = sheet.getLastRow();
-  var col = this.outputBuffCol(vals, jobs);
-  var secTime = time2Sec(vals["time"]);
+  var maxCol = 0;
   
-  if (col == null) return startRow;
-  
-  for(var i = startRow; i <= lastRow; i++){
-    aVal = formatDate(sheet.getRange(i, 1).getValue())
-    bVal = formatDate(sheet.getRange(i + 1, 1).getValue())
-    if (aVal == false || bVal == false) break;
-
-    var bTime = time2Sec(aVal);
-    var aTime = time2Sec(bVal);
+  for (var i=0; i<vals.length; i++) {
+    var val = vals[i];
+    var col = this.outputBuffCol(val, jobs);
+    var secTime = time2Sec(val["time"]);
+    var row = 0;
     
-    // 現在の列と次の列の間にtimeが存在すれば出力
-    if (bTime <= secTime && aTime >= secTime) {
-      var row = i;
-      
-      if (bTime == secTime) {
-        row = i;
-        
-      } else if(aTime == secTime) {
-        row = i + 1;
-        
+    // タイムラインをループ    
+    for (var li=1; li<this.lines.length - 1; li++) {
+      var line = this.lines[li];
+      var afterLine = this.lines[li + 1];      
+      var beforeTime = time2Sec(line[0]);
+      var afterTime = time2Sec(afterLine[0]);
+
+      // 現在の列と次の列の間にtimeがあれば出力
+      if (beforeTime > secTime || afterTime < secTime) continue;
+
+      // 何列目に出力するか？
+      if (beforeTime <= secTime && afterTime >= secTime) {
+        row = li;
+      } else if (afterTime == secTime) {
+        row = li + 1;
       } else {
         // timeが近い方に設定
-        var bDiff = secTime - bTime;
-        var aDiff = aTime　 - secTime;
+        var beforeDiffTime = secTime - beforeTime;
+        var afterDiffTime = afterTime - secTime;
         
-        if (this.outputType != OUTPUT_ALLBUFF && bDiff >= OVERSEC && aDiff >= OVERSEC) {
-          // 指定秒以上差がある場合は行を追加
-          insertRow(sheet, i, vals["time"]);
-          row = i + 1;
-          
-        } else if (bDiff > aDiff){
-          row = i + 1;
-          
-        }
-        
-      }
-      
-      // エクセルに出力
-      if(vals["type"] == AC_LOSE_EFFECT || vals["event"] == "ステラデトネーション"　|| vals["event"] == "ステラバースト") {
-        // バフが消失
-        this.outputLoseEffect(sheet, row, col);
-        
-      } else if(vals["type"] == AC_REFRESH) {
-        // バフを上書き
-        sheet.getRange(row, col).setValue(1);
-        this.outputPadCell(sheet, row, col);
-        
-      } else {
-        var who  = vals["who"].replace(/\s.*$/, "");
-        var whom = vals["whom"].replace(/\s.*$/, "");
-        var cValue = 1;
-  
-
-        if (booName2Cell(vals["event"])) {
-          // targetを出力
-          cValue = whom;
-          if (jobs[vals["whom"]] != undefined) cValue = jobs[vals["whom"]];
-          
-        } else if (this.outputType == OUTPUT_RAIDBUFF && LB_OutputBuffCol(vals["event"], vals["type"]) > 0) {
-          // LB系
-          cValue = vals["event"];
-        
-        }  else if (this.outputType == OUTPUT_SMNBUFF) {
-          // 召喚
-          if (SMN_EnagyValue(vals["event"]) != null) {
-            cValue = SMN_EnagyValue(vals["event"]);
-
-          } else if (SMN_FlowValue(vals["event"]) != null) {
-            cValue = SMN_FlowValue(vals["event"]);
-
+        // 指定秒以上差がある場合は行を追加
+        if (this.outputType != OUTPUT_ALLBUFF && beforeDiffTime >= OVERSEC && afterDiffTime >= OVERSEC) {
+          row = li + 1;
+          this.lines.slice(row, 0, line);
+          this.lines[row][0] = val["time"];
+        } else {
+          if (beforeDiffTime > afterDiffTime) {
+            row = li + 1;
+          } else {
+            row = li;
           }
         }
-
-        if (cValue != null) sheet.getRange(row, col).setValue(cValue);
       }
       
-      // 現在のrowの2つ上のrowを返す(何故かlogが順番が前後しているパターンが稀にあるため)
-      if(row <= startRow + 1) {
-        return startRow;
-      } else {
-        return row - 2;
+      break;
+    }
+
+    // this.linesに設定
+    if (row == 0) continue;
+    if (col > maxCol) maxCol = col;
+    while(this.lines[row].length < maxCol) this.lines[row].push(null);
+
+    if(val["type"] == AC_LOSE_EFFECT || val["event"] == "ステラデトネーション"　|| val["event"] == "ステラバースト") {
+      // バフが消失
+      this.outputLoseEffect(row, col - 1);
+    } else if(val["type"] == AC_REFRESH) {
+        // バフを上書き
+      this.lines[row][col - 1] = 1;
+      this.outputPadCell(row, col - 1);
+    } else {
+      var who  = val["who"].replace(/\s.*$/, "");
+      var whom = val["whom"].replace(/\s.*$/, "");
+      var cValue = 1;
+
+      if (booName2Cell(val["event"])) {
+        // targetを出力
+        cValue = whom;
+        if (jobs[val["whom"]] != undefined) cValue = jobs[val["whom"]];
+        
+      } else if (this.outputType == OUTPUT_RAIDBUFF && LB_OutputBuffCol(val["event"], val["type"]) > 0) {
+        // LB系
+        cValue = val["event"];
+        
+      }  else if (this.outputType == OUTPUT_SMNBUFF) {
+        // 召喚
+        if (SMN_EnagyValue(val["event"]) != null) {
+          cValue = SMN_EnagyValue(val["event"]);
+          
+        } else if (SMN_FlowValue(val["event"]) != null) {
+          cValue = SMN_FlowValue(val["event"]);
+          
+        }
       }
+      
+      if (cValue != null) this.lines[row][col - 1] = cValue;
     }
   }
+
+  for (var i=0; i < this.lines.length; i++) {
+    while(this.lines[i].length < maxCol) this.lines[i].push(null);
+  }
+
+  // シートに書き込み
+  sheet.getRange(this.startRow,1, this.lines.length, maxCol).setValues(this.lines);
 }
 
 
 // Lose Effectを出力
-clsOutput.prototype.outputLoseEffect = function(sheet, row, col) {  
-  var data = sheet.getRange(row, col).getValue();
-  if(data > 0 || data != "") return;  
+clsOutput.prototype.outputLoseEffect = function(row, col) {
+  var data = this.lines[row][col];
+  if(data != null) return;
 
-  sheet.getRange(row, col).setValue(0);
-  this.outputPadCell(sheet, row, col);
+  this.lines[row][col] = 0;
+  this.outputPadCell(row, col);
 }
 
 
 // 上に向かって1以上が出るまでセルを埋める
-clsOutput.prototype.outputPadCell = function(sheet, lastRow, col) {
-  var value = null;
-  var rowLen = lastRow - this.startRow;
-  if (rowLen <= 0) return;
-    
-  var cells = sheet.getRange(this.startRow, col, rowLen, 1).getValues();
-  var cntCell = cells.length;
-  var cntRows = 0;
-  
-  for(var i = cntCell - 1; i >= 0; i--){
-    var data = cells[i][0];
-    
+clsOutput.prototype.outputPadCell = function(lastRow, col) {
+  if (lastRow <= 0) return;
+
+  var value = 1;
+  var startRow = 0;
+
+  // セル埋めスタート位置
+  for(var i=lastRow - 1; i > 0; i--) {
+    var data = this.lines[i][col];
     // 0が出たときは無効
-    if (typeof data == "number" && data == 0) {
-      cntRows = 0;
-      break;
-    }
+    if (data == 0) return;
     
+    // 埋める値を取得
     if((typeof data == "number" && data > 0) || (typeof data == "string" && data != "")) {
       value = data;
       break; 
     }
-    
-    cntRows = cntRows + 1;
   }
   
-  if (cntRows == 0) return;
-  if (value == null) value = 1;
-  
-  sheet.getRange(lastRow - cntRows, col, cntRows, 1).setValue(value);
+  for(var row=i; row<lastRow; row++) {
+    while(this.lines[row].length < col + 1) this.lines[row].push(null);
+    this.lines[row][col] = value;
+  }
 }
 
 
@@ -277,27 +271,26 @@ clsOutput.prototype.outputBuffCol = function(val, jobs) {
   // シナジー系
   if (this.outputType != OUTPUT_ALLBUFF) {
     var raidCol = RAIDBUFF_OutputBuffCol(who, whom, type, event, this.userName);
-    if(raidCol != null) col = raidCol;
+    if(raidCol != null) return raidCol;
     
     // LB
     if (this.outputType == OUTPUT_RAIDBUFF) {
       var lbCol = LB_OutputBuffCol(event, type);
-      if(lbCol > 0) col = 18;
+      if(lbCol > 0) return 18;
     }
     
     // ジョブ別
     var objJobBuff = new Job_OutputBuff(this.outputType, who, whom, type, event, this.userName);
     var jobCol = objJobBuff.getCol();
-    if(jobCol != null) col = jobCol;
+    if(jobCol != null) return jobCol;
   
   } else {
     // ヒール系
     var objHealBuff = new Heal_OutputBuff(this.outputType, who, whom, type, event, this.userName, jobs);
     var healCol = objHealBuff.getCol();
-    if(healCol != null) col = healCol;
+    if(healCol != null) return healCol;
   
   }
-   
   
   return col;
 }

@@ -186,27 +186,10 @@ Convert2Fflogs.prototype.data2Parse = function(logCode, fId, jobName) {
   // 終了時間のセット
   oValues.push(getTlValue({"time": this.getTime(endTime), "type": AC_COMBATEND}));
 
-  
   // シートに書き込み
   objSheet = SpreadsheetApp.getActive().getSheetByName(this.sheetName);
-  this.outputOValue(objSheet, oValues);
-  this.outputOBuff(objSheet, oBuffs, jobs);
-}
-
-
-// TIMELINE欄に出力
-Convert2Fflogs.prototype.outputOValue = function(sheet, datas) {
-  this.clsOutput.outputTimeline(sheet, datas);
-}
-
-// BUFF欄に出力
-Convert2Fflogs.prototype.outputOBuff = function(sheet, datas, jobs) {
-  var startRow = this.startRow;
-  var oLastRow = datas.length;
-  
-  for(var rowNum=0;rowNum<oLastRow;rowNum++) { 
-    startRow = this.clsOutput.outputallbuff(sheet, startRow, datas[rowNum], jobs);
-  }
+  this.clsOutput.outputTimeline(objSheet, oValues);
+  this.clsOutput.setAllbuff(objSheet, oBuffs, jobs);
 }
 
 

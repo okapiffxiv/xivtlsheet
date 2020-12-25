@@ -152,29 +152,7 @@ function getUserName() {
 
 // セルに名前をセットするか
 function booName2Cell(event) {
-  if (event == "インターベンション" || 
-      event == "かばう" || 
-      event == "原初の猛り" || 
-      event == "ブラックナイト" || 
-      event == "オーロラ" || 
-      event == "ハート・オブ・ストーン" || 
-      event == "アポカタスタシス" || 
-      event == "ベネディクション" || 
-      event == "テトラグラマトン" || 
-      event == "ディヴァインベニゾン" || 
-      event == "生命活性法" ||
-      event == "ディグニティ" ||
-      event == "シナストリー［被］" ||
-      event == "フェイユニオン［被］" ||
-      event == "深謀遠慮の策" ||
-      event == "地神のミンネ" ||
-      event == "ベネフィラ" ||
-      event == "挑発") {
-  
-    return true;
-  }
-  
-  return false;
+  return SET_TARGET_SKILLS.indexOf(event) >= 0 ? true: false;
 }
 
 
@@ -189,11 +167,7 @@ function booOutputTlSkill() {
   var sheet = SpreadsheetApp.getActive().getSheetByName(SHEET_SETTING);
   var val = sheet.getRange(COL_OUTPUT_SKILL).getValue();
   
-  if(val == 1) {
-    return true;
-  } else {
-    return false;
-  }
+  return val == 1 ? true : false;
 }
 
 // 行を削除

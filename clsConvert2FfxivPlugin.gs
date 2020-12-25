@@ -133,25 +133,10 @@ Convert2FfxivPlugin.prototype.data2Parse = function() {
 
   // シートに書き込み
   objSheet = SpreadsheetApp.getActive().getSheetByName(this.sheetName);
-  this.outputOValue(objSheet, oValues);
-  this.outputOBuff(objSheet, oBuffs, jobs);
+  this.clsOutput.outputTimeline(objSheet, oValues);
+  this.clsOutput.setAllbuff(objSheet, oBuffs, jobs);
 }
 
-
-// TIMELINE欄に出力
-Convert2FfxivPlugin.prototype.outputOValue = function(sheet, datas) {
-  this.clsOutput.outputTimeline(sheet, datas);
-}
-
-// BUFF欄に出力
-Convert2FfxivPlugin.prototype.outputOBuff = function(sheet, datas, jobs) {
-  var startRow = this.startRow;
-  var oLastRow = datas.length;
-  
-  for(var rowNum=0;rowNum<oLastRow;rowNum++) { 
-    startRow = this.clsOutput.outputallbuff(sheet, startRow, datas[rowNum], jobs);
-  }
-}
 
 // 1行ずつ解析
 Convert2FfxivPlugin.prototype.parseLine = function(data) {
@@ -160,13 +145,13 @@ Convert2FfxivPlugin.prototype.parseLine = function(data) {
   
   text = data.replace(/^\[\d{2}:\d{2}:\d{2}\.\d{3}\]\s/g, "");
   
-  val["time"]  = data.replace(/^\[([^\]]+)\].*$/g, "$1");
-  val["time"]  = time2Sec(val["time"], this.startTime);
-  val["type"]  = text.replace(/^([0-9A-Z]{2}):.*/g, "$1");
-  val["who"]   = "";
-  val["whom"]  = "";
-  val["event"] = "";
-  val["log"] = text;
+  val["time"]   = data.replace(/^\[([^\]]+)\].*$/g, "$1");
+  val["time"]   = time2Sec(val["time"], this.startTime);
+  val["type"]   = text.replace(/^([0-9A-Z]{2}):.*/g, "$1");
+  val["who"]    = "";
+  val["whom"]   = "";
+  val["event"]  = "";
+  val["log"]    = text;
   
   if (text.match(/^00:0039:戦闘開始！/)) {
     if (this.startTime != null) {
