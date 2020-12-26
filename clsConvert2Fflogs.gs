@@ -3,7 +3,18 @@
 ////////////////////////////////////////
 
 var Convert2Fflogs = function(outputType, job) {
-  // バトルログを取得
+  // API Key取得
+  var apiKey = getLogsKey();
+  if (apiKey.length == 0) { 
+    // key未設定時はKeyを設定→保存
+    apiKey = dialogApiKey();
+    if (!apiKey || apiKey.length == 0) return;
+    
+    var sheet = SpreadsheetApp.getActive().getSheetByName(SHEET_SETTING);
+    sheet.getRange(COL_API_KEY).setValue(apiKey);
+  }
+  
+  // 入力テキストからfight_codeとlog_code取得
   var fightCode = dialogFflogs();
   if (!fightCode) return;
   fightCode = fightCode.replace(/^.*\/reports\//, '').replace(/\&.*$/, '');
@@ -34,17 +45,17 @@ var Convert2Fflogs = function(outputType, job) {
   }
   
 
-  this.data2Parse(logCode, fId, job);
+  this.data2Parse(logCode, fId, job, apiKey);
   
   return true;
 }
 
 
 // データをパース
-Convert2Fflogs.prototype.data2Parse = function(logCode, fId, jobName) {
+Convert2Fflogs.prototype.data2Parse = function(logCode, fId, jobName, apiKey) {
   // 開始時間、終了時間の抽出
   try {
-    var response = getResponse("report/fights/" + logCode);
+    var response = getResponse("report/fights/" + logCode, apiKey);
   } catch(e) {
     return false;
   }
@@ -92,7 +103,7 @@ Convert2Fflogs.prototype.data2Parse = function(logCode, fId, jobName) {
   var logs = [];
   while(startTime != undefined) {
     try {
-      var response = getResponse("report/events/" + logCode + "?start=" + startTime + "&end=" + endTime + "&translate=true");
+      var response = getResponse("report/events/" + logCode + "?start=" + startTime + "&end=" + endTime + "&translate=true", apiKey);
     } catch(e) {
       return false;
     }

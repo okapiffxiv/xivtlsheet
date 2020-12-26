@@ -25,6 +25,7 @@ function getStartRow(tmpName) {
   }
 }
 
+
 // タイムライン式のデータを返す
 function　getTlValue(datas) {
   var data = {
@@ -34,6 +35,7 @@ function　getTlValue(datas) {
     "whom" : "",
     "event": "",
     "count": 1,
+    "damage": null,
     "log"  : ""
   };
   
@@ -120,15 +122,6 @@ function sec2Time(time) {
   return ("00:" + minute + ":" + second);
 }
 
-// Date型をフォーマット
-function formatDate(time) {
-  if(time instanceof Date) {
-    return Utilities.formatDate(time, timezone, 'HH:mm:ss.SSS');
-  } else {
-    return false;
-  }
-}
-
 
 // シート検索
 function booSheet(sheetName) {
@@ -170,29 +163,10 @@ function booOutputTlSkill() {
   return val == 1 ? true : false;
 }
 
-// 行を削除
-function deleteRows(sheetName, startRow) {
-  var sheet = SpreadsheetApp.getActive().getSheetByName(sheetName);
-  if(sheet == null) return;
-  var lastRow = sheet.getLastRow();
-  var lastCol = sheet.getLastColumn();
-  
-  if (lastRow > 1) {
-    sheet.deleteRows(startRow + 1, lastRow - startRow);
-    sheet.getRange(startRow, 1, 1, lastCol).clearContent();
-  }
-}
-
-// バフ欄をクリア
-function clearBuffs(sheetName, startRow) {
-  var sheet = SpreadsheetApp.getActive().getSheetByName(sheetName);
-  if(sheet == null) return;
-  var lastRow = sheet.getLastRow();
-  var lastCol = sheet.getLastColumn();
-  var startCol = CNT_TIMELINE_COL + 1;
-  
-  if (lastRow <= startRow) return;
-  sheet.getRange(startRow, startCol, lastRow - startRow, lastCol - startCol).clearContent();
+// FFLogsのAPIキー
+function getLogsKey() {
+  var sheet = SpreadsheetApp.getActive().getSheetByName(SHEET_SETTING);
+  return sheet.getRange(COL_API_KEY).getValue();
 }
 
 // タイムラインか
@@ -211,23 +185,6 @@ function booOutputToTL(outputType) {
   }
   
   return false;
-}
-
-// 行を追加
-function insertRow(sheet, row, time) {
-  var lastCol = sheet.getLastColumn();
-  var startCol = CNT_TIMELINE_COL + 1;
-  sheet.insertRowAfter(row);
-  row = row + 1;
-  sheet.getRange(row, 1).setValue(time);
-  
-  for(var i = startCol; i <= lastCol; i++) {
-    var bbVal = sheet.getRange(row - 2, i).getValue();
-    var bVal  = sheet.getRange(row - 1, i).getValue();
-    var aVal  = sheet.getRange(row + 1, i).getValue();
-    
-    if(bVal >= 1 && (aVal != "" || bbVal >= 1)) sheet.getRange(row, i).setValue(bVal);
-  }
 }
 
 
@@ -266,25 +223,22 @@ function copyTempSheets_ (sheetName, toName) {
 }
 
 
-// バージョンチェック
-function booUpdate() {
-  // ID からスプレッドシートを取得 COL_LASTEST_VERSION
-  var book    = SpreadsheetApp.getActiveSpreadsheet();
-  var sheet　　　　 = book.getSheetByName(SHEET_SETTING);
-  var lastest =  sheet.getRange(COL_LASTEST_VERSION).getValue();
-
-  Browser.msgBox(VERSION + " != " + lastest, Browser.Buttons.OK)
-  if (VERSION != lastest) return true;
-  return false;
-}
-
-
 // Logsパラメータ設定ダイアログ
 function dialogFflogs() {
   var message = "https://www.fflogs.com/reports/【???????/#fight=数字】\nの【】の部分を入力";
   var dialog = Browser.inputBox(message, Browser.Buttons.OK_CANCEL);
   if (dialog != "cancel") return dialog;
 
+  return false;
+}
+
+
+// LogsAPI設定ダイアログ
+function dialogApiKey() {
+  var message = "FFlogsのWeb API V1クライアントキーを入力";
+  var dialog = Browser.inputBox(message, Browser.Buttons.OK_CANCEL);
+  if (dialog != "cancel") return dialog;  
+  
   return false;
 }
 
@@ -324,11 +278,11 @@ function getFriendryName(job, friendries, jobDef) {
 }
 
 // FFLogsAPIへアクセス
-function getResponse(path) {
+function getResponse(path, key) {
   if (path.match(/\?/)) {
-    path = path + "&api_key=" + LOGS_KEY;
+    path = path + "&api_key=" + key;
   } else {
-    path = path + "?api_key=" + LOGS_KEY;
+    path = path + "?api_key=" + key;
   }
   
   try {

@@ -5,7 +5,7 @@
 //var objSheet;
 //var timezone = 'JST';
 //var COL_OUTPUT_SKILL = "C2";
-//var COL_USER_NAME = "C3";
+//var COL_API_KEY = "C3";
 //
 //// 出力カラム
 //var oStartRow   = 2;
