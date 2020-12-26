@@ -11,7 +11,7 @@ var clsOutput = function(outputType, startRow, tlType, userName) {
 }
 
 // シートにタイムラインを出力
-clsOutput.prototype.outputTimeline = function(sheet, vals) {
+clsOutput.prototype.outputTimeline = function(sheet, vals, jobs) {
   var oVals  = [];
   var valLen = vals.length;
   var type   = "";
@@ -67,6 +67,15 @@ clsOutput.prototype.outputTimeline = function(sheet, vals) {
     if(this.outputType == OUTPUT_LOG) {
       val.push(vals[i]["log"]);      
       val.push(MatchText(vals[i]["log"]));
+
+    } else if (this.outputType == OUTPUT_ALLBUFF) {
+      while(val.length < CNT_ALLBUFF_COL) val.push(null);
+      val[CNT_ALLBUFF_COL] = vals[i]['damages'] == undefined ? '' : vals[i]['damages'].join('|');
+      if (val[CNT_ALLBUFF_COL].length > 0) {
+        for (var name in jobs) {
+          val[CNT_ALLBUFF_COL] = val[CNT_ALLBUFF_COL].replace(name, jobs[name]);
+        }
+      }
     }
 
     oVals.push(val);

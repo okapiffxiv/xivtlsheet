@@ -177,15 +177,18 @@ Convert2Fflogs.prototype.data2Parse = function(logCode, fId, jobName, apiKey) {
     var duplicateIdx = this.clsOutput.duplicateIdx(oValues, log);
     if (duplicateIdx) {
       oValues[duplicateIdx]['count']++;
+      if (log['damage'] != null) oValues[duplicateIdx]['damages'].push(log['damage']);
       continue;
     }
 
     if (this.tlType == OUTPUT_TIMELINE && !log["booFriendly"]) {
       if (log["type"] == AC_LOSE_EFFECT) continue;
+      log['damages'] = (log['damage'] == null) ? [] : [log['damage']];
       if (!this.clsOutput.booContinue(log)) oValues.push(log);
       
     } else {
       if (this.tlType == OUTPUT_SKILL) {
+        log['damages'] = (log['damage'] == null) ? [] : [log['damage']];
         if (!this.clsOutput.booContinue(log)) oValues.push(log);
       }
       if (this.outputType != OUTPUT_TIMELINE && this.outputType != OUTPUT_LOG) {
@@ -199,7 +202,7 @@ Convert2Fflogs.prototype.data2Parse = function(logCode, fId, jobName, apiKey) {
 
   // シートに書き込み
   objSheet = SpreadsheetApp.getActive().getSheetByName(this.sheetName);
-  this.clsOutput.outputTimeline(objSheet, oValues);
+  this.clsOutput.outputTimeline(objSheet, oValues, jobs);
   this.clsOutput.setAllbuff(objSheet, oBuffs, jobs);
 }
 

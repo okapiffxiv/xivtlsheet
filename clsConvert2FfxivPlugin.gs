@@ -6,6 +6,7 @@ var Convert2FfxivPlugin = function(outputType, job) {
   // 出力する対象
   this.outputType = outputType;
   this.job        = job;
+  this.friendlies = [];
   
   // startRow
   this.startRow = getStartRow(outputType);
@@ -45,9 +46,8 @@ Convert2FfxivPlugin.prototype.data2Parse = function() {
   this.startTime = null;
   this.endTime   = null;
 
-  var oValues = [];
-  var oBuffs  = [];
-  
+  var oValues  = [];
+  var oBuffs   = [];
   
   // Logのデータを１行ずつループ
   var logs = [];
@@ -83,13 +83,12 @@ Convert2FfxivPlugin.prototype.data2Parse = function() {
   
   if (this.outputType != OUTPUT_TIMELINE && this.outputType != OUTPUT_LOG) {
     // ユーザの設定
-    var friendlies = [];
-    for (userName in jobs) friendlies.push({'type': jobs[userName], 'name': userName});
+    for (userName in jobs) this.friendlies.push({'type': jobs[userName], 'name': userName});
     
     if (this.job == undefined) {
-      this.userName = dialogJob(friendlies);
+      this.userName = dialogJob(this.friendlies);
     } else {
-      this.userName = getFriendryName(this.job, friendlies)
+      this.userName = getFriendryName(this.job, this.friendlies)
     }
     if (!this.userName) return false;
   }
@@ -102,14 +101,17 @@ Convert2FfxivPlugin.prototype.data2Parse = function() {
     var duplicateIdx = this.clsOutput.duplicateIdx(oValues, log);
     if (duplicateIdx) {
       oValues[duplicateIdx]['count']++;
+      if (log['damage'] != null) oValues[duplicateIdx]['damages'].push(log['damage']);
       continue;
     }
 
     if (this.tlType == OUTPUT_TIMELINE && log["timeline"]) {
+      log['damages'] = (log['damage'] == null) ? [] : [log['damage']];
       if (!this.clsOutput.booContinue(log)) oValues.push(log);
       
     } else {
       if (this.tlType == OUTPUT_SKILL) {
+        log['damages'] = (log['damage'] == null) ? [] : [log['damage']];
         if (!this.clsOutput.booContinue(log)) oValues.push(log);
       }
 
@@ -131,7 +133,7 @@ Convert2FfxivPlugin.prototype.data2Parse = function() {
 
   // シートに書き込み
   objSheet = SpreadsheetApp.getActive().getSheetByName(this.sheetName);
-  this.clsOutput.outputTimeline(objSheet, oValues);
+  this.clsOutput.outputTimeline(objSheet, oValues, jobs);
   this.clsOutput.setAllbuff(objSheet, oBuffs, jobs);
 }
 
@@ -217,9 +219,11 @@ Convert2FfxivPlugin.prototype.parseLine = function(data) {
 
     val["whom"] = text.replace(new RegExp(".*" + val["event"] + ":[0-9A-Z]{8}:"), "");
     val["whom"] = val["whom"].replace(/^([^:]*):.*$/, "$1");
-
-    // 16:40003082:ラムウ:4BB6:裁きの熱雷:1027233E:Row Skywalker:550003:299E0000:1B:4BB68000:0:0:0:0:0:0:0:0:0:0:0:0:158433:158433:10000:0:0:1000:100.1449:95.23157:-0.01531982:-0.03763103:44:44:0:0:0:1000:100.0386:99.23011:0:3.11724:00002196
-    val["damage"] = parseInt(text.replace(/^[^:]+:[^:]+:[^:]+:[^:]+:[^:]+:(\d{4}).+$/, "$1"), 16);
+    
+    var damage = text.replace(/^[^:]+:[^:]+:[^:]+:[^:]+:[^:]+:[^:]+:[^:]+:[^:]*:([^:]{1,4})[^:]*:.+$/, "$1");
+    if (!booEnemy(val['whom']) && damage.length > 0 && damage.length <= 4 && val["whom"].length > 0) {
+      val["damage"] = val['whom'] + "：" + parseInt(damage, 16);
+    }
 
     // AAは無視
     if (booAA(val["event"])) val["event"] = EVENT_UNKNOWN;
@@ -309,7 +313,7 @@ Convert2FfxivPlugin.prototype.setJob = function(who, event) {
     return "Samurai";
   } else if (event == "ヘヴィショット") {
     return "Bard";
-  } else if (event == "スプリットショット") {
+  } else if (event == "整備") {
     return "Machinist";
   } else if (event == "カスケード") {
     return "Dancer";

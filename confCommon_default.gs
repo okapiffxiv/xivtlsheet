@@ -1,7 +1,7 @@
 //////////////////////////////////////////
 //// 共通定義
 //////////////////////////////////////////
-//var VERSION = "2.7.2";
+//var VERSION = "2.8.0";
 //var objSheet;
 //var timezone = 'JST';
 //var COL_OUTPUT_SKILL = "C2";
@@ -103,12 +103,7 @@
 //// 横軸カラム数
 //var CNT_TIMELINE_COL   = 4;
 //var CNT_RAIDBUFF_COL   = 13;
-//var CNT_BARRIER_COL    = 13;
-//var CNT_BARRIERALL_COL = 3;
-//var CNT_DOWN_COL       = 5;
-//var CNT_WHM_COL        = 9;
-//var CNT_AST_COL        = 8;
-//var CNT_SCH_COL        = 10;
+//var CNT_ALLBUFF_COL    = 110;
 //
 //var CNT_HWAR_COL = 11;
 //var CNT_HPLD_COL = 13;
