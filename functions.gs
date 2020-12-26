@@ -134,15 +134,6 @@ function booSheet(sheetName) {
 }
 
 
-// ユーザ名取得
-function getUserName() {
-  var sheet = SpreadsheetApp.getActive().getSheetByName(SHEET_SETTING);
-  var userName = sheet.getRange(COL_USER_NAME).getValue();
-  
-  return userName
-}
-
-
 // セルに名前をセットするか
 function booName2Cell(event) {
   return SET_TARGET_SKILLS.indexOf(event) >= 0 ? true: false;

@@ -14,9 +14,6 @@ var Convert2FfxivPlugin = function(outputType, job) {
   this.tlType = OUTPUT_TIMELINE;
   if (booOutputTlSkill()) this.tlType = OUTPUT_SKILL;
 
-  // ユーザ名
-  this.userName = getUserName();
-  
   // 出力クラス
   this.clsOutput = null;
   
@@ -66,6 +63,7 @@ Convert2FfxivPlugin.prototype.data2Parse = function() {
       "who"  : data["who"], 
       "whom" : data["whom"],
       "event": data["event"],
+      "damage": data["damage"],
       "log"  : data["log"]
     });
     
@@ -151,6 +149,7 @@ Convert2FfxivPlugin.prototype.parseLine = function(data) {
   val["who"]    = "";
   val["whom"]   = "";
   val["event"]  = "";
+  val["damage"] = null;
   val["log"]    = text;
   
   if (text.match(/^00:0039:戦闘開始！/)) {
@@ -218,6 +217,9 @@ Convert2FfxivPlugin.prototype.parseLine = function(data) {
 
     val["whom"] = text.replace(new RegExp(".*" + val["event"] + ":[0-9A-Z]{8}:"), "");
     val["whom"] = val["whom"].replace(/^([^:]*):.*$/, "$1");
+
+    // 16:40003082:ラムウ:4BB6:裁きの熱雷:1027233E:Row Skywalker:550003:299E0000:1B:4BB68000:0:0:0:0:0:0:0:0:0:0:0:0:158433:158433:10000:0:0:1000:100.1449:95.23157:-0.01531982:-0.03763103:44:44:0:0:0:1000:100.0386:99.23011:0:3.11724:00002196
+    val["damage"] = parseInt(text.replace(/^[^:]+:[^:]+:[^:]+:[^:]+:[^:]+:(\d{4}).+$/, "$1"), 16);
 
     // AAは無視
     if (booAA(val["event"])) val["event"] = EVENT_UNKNOWN;

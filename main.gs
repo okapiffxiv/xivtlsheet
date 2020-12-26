@@ -4,20 +4,6 @@ function onOpen(){
 }
 
 
-function ユーザ名設定() {
-  var userName = getUserName();
-  if(userName == undefined || userName == "") userName = ERR_NO_SETTING;
-  var message = "出力対象のユーザ名を入力(半角)\\n現在の設定: 「" + userName + "」\\n";
-  
-  var dialog = Browser.inputBox(message, Browser.Buttons.OK_CANCEL);
-  
-  if (dialog != "cancel"){
-    var sheet = SpreadsheetApp.getActive().getSheetByName(SHEET_SETTING);
-    sheet.getRange(COL_USER_NAME).setValue(dialog);
-    Menu();
-  }
-}
-
 function スキル回しに切り替え() {
   var oldVal = booOutputTlSkill();
   var sheet = SpreadsheetApp.getActive().getSheetByName(SHEET_SETTING);

@@ -1,7 +1,7 @@
 //////////////////////////////////////////
 //// 共通定義
 //////////////////////////////////////////
-//var VERSION = "2.6.1";
+//var VERSION = "2.7.2";
 //var objSheet;
 //var timezone = 'JST';
 //var COL_OUTPUT_SKILL = "C2";
@@ -50,7 +50,6 @@
 //
 //var VERSION_SHEET_ID = "";
 //var TMP_SHEET_ID = "";
-//var LOGS_KEY = "";
 //var LOGS_HOST = "https://ja.fflogs.com:443/v1/";
 //
 //// DBシート名
