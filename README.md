@@ -22,7 +22,7 @@ ACTのlog、FFLogsからFF14零式コンテンツ用のタイムラインのス�
 ![使い方](https://i.imgur.com/wxDsYht.gif)
 1. FFlogsの戦闘ログページを開く
 1. URLのreports/の後「ランダムな文字#fight=数字」の部分をコピー
-1. メニューの「タイムライン＞FFLogsから作成」より出力したいデータを選択
+1. メニューの「タイムライン＞FFLogsから作成」より出力したいデータを選択。初めはWEB APIキーの設定を聞かれるのでキーを入力（[参考記事](https://upepep.blogspot.com/2019/01/hojoring-ultrascouter.html#chapter6)）
 1. 出てきたダイアログにコピーしたテキストを貼り付けてOKをクリック
 
 ### 機能
